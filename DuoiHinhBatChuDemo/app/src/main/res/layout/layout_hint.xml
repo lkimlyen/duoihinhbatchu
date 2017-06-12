@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="537dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/popupbackground">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="35dp"
+            android:gravity="center"
+            android:text="Trợ giúp"
+            android:textColor="#ffffff"
+            android:textSize="30dp" />
+
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:background="@drawable/buttondong"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="40dp"/>
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="8dp"
+        app:srcCompat="@drawable/buttonusernormal" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="right"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/buttonclose" />
+
+
+</FrameLayout>

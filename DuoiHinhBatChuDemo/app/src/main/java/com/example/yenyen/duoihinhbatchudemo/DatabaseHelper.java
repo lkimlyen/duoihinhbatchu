@@ -93,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public void createDataBase() throws IOException {
+    public void copyDatabaseFromAsset() throws IOException {
         boolean dbExist = checkDataBase(); //kiem tra db
 
         if (dbExist) {

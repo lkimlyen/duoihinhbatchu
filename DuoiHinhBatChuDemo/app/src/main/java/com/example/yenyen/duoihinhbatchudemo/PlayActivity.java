@@ -25,10 +25,14 @@ public class PlayActivity extends AppCompatActivity {
     DatabaseHelper helper;
     int socau = 10;
     int index = 0;
+    int vitri = 0;
     CauHoi cauHoi;
     private ArrayList<CauHoi> dsCauHoi;
     String[] kyTu = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     ArrayList<String> dsItem = new ArrayList<>();
+    ArrayList<TextView> dsODapAn = new ArrayList<>();
+    ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
+    TextView textview1, textview2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +41,13 @@ public class PlayActivity extends AppCompatActivity {
 
         helper = new DatabaseHelper(PlayActivity.this);
         try {
-            helper.createDataBase();
+            helper.copyDatabaseFromAsset();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        helper.close();
-        helper = new DatabaseHelper(PlayActivity.this);
+        //helper.close();
+        //helper = new DatabaseHelper(PlayActivity.this);
+
         dsCauHoi = new ArrayList<CauHoi>();
         dsCauHoi = helper.getRandomQuestion(socau);
 
@@ -50,12 +55,12 @@ public class PlayActivity extends AppCompatActivity {
         layout2 = (LinearLayout) findViewById(R.id.frameLayout5);
         layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
         ivImage = (ImageView) findViewById(R.id.ivImage);
-        hienthi(index);
+        hienthi();
 
 
     }
 
-    public void hienthi(int vitri) {
+    public void hienthi() {
         LayoutInflater inf = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         cauHoi = dsCauHoi.get(vitri);
         try {
@@ -66,7 +71,7 @@ public class PlayActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String shortAnswer = dsCauHoi.get(index).shortAnswer;
+        String shortAnswer = dsCauHoi.get(vitri).shortAnswer;
         String[] getShortAnswer = shortAnswer.split(",");
         for (int i = 0; i < getShortAnswer.length; i++) {
             dsItem.add(getShortAnswer[i]);
@@ -77,13 +82,14 @@ public class PlayActivity extends AppCompatActivity {
             dsItem.add(kyTu[rd]);
         }
         Collections.shuffle(dsItem);
+        //chỗ này show ra các item ở trên
         for (int i = 0; i < getShortAnswer.length; i++) {
 
             View rowview = inf.inflate(R.layout.layout_item_choose, null);
-
             TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
             ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-
+            dsODapAn.add(textview);
+            dsIVDapAn.add(imageview);
             Resources r = getResources();
             float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -92,11 +98,23 @@ public class PlayActivity extends AppCompatActivity {
             layout3.addView(rowview);
 
         }
-
+        ////chỗ này show ra các để chọn
         for (int i = 0; i < 8; i++) {
             View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu);
-            textview.setText(dsItem.get(i));
+            textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
+            textview1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (index < dsODapAn.size()) {
+                        String chuoi = ((TextView) v).getText().toString();
+                        dsODapAn.get(index).setText(chuoi);
+                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                        index++;
+                        ((TextView) v).setText("");
+                    }
+                }
+            });
+            textview1.setText(dsItem.get(i));
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
             param.gravity = Gravity.CENTER;
             rowview.setLayoutParams(param);
@@ -104,13 +122,27 @@ public class PlayActivity extends AppCompatActivity {
         }
         for (int j = 8; j < 16; j++) {
             View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu);
-            textview.setText(dsItem.get(j));
+            textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
+            textview2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (index < dsODapAn.size()) {
+
+                        dsODapAn.get(index).setText(((TextView) v).getText().toString());
+                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                        index++;
+                        ((TextView) v).setText("");
+                    }
+                }
+            });
+            textview2.setText(dsItem.get(j));
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
             param.gravity = Gravity.CENTER;
             rowview.setLayoutParams(param);
             layout2.addView(rowview);
         }
+
+
     }
 
 }
