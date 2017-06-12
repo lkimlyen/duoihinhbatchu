@@ -114,7 +114,7 @@
         android:layout_below="@+id/linearLayout">
 
         <ImageView
-            android:id="@+id/imageView14"
+            android:id="@+id/ivImage"
             android:layout_width="350dp"
             android:layout_height="210dp"
             android:layout_gravity="center"

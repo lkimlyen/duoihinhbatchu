@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.FileOutputStream;
@@ -13,13 +14,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by yenyen on 6/12/2017.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static String DB_PATH = "/data/data/com.example.yenyen.duoihinhbatchudemo/databases/";
-    private static String DB_NAME = "duoihinhbatchu.db";
+    private static String DB_NAME = "duoihinhbatchu.sqlite";
     private static final int DATABASE_VERSION = 1;
 
     private static final String TABLE_NAME = "cauhoi";
@@ -31,12 +34,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase myDataBase;
     Context myContext;
-
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
         this.myContext = context;
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -55,20 +56,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super.close();
 
     }
-
     private boolean checkDataBase() {
         SQLiteDatabase checkDB = null;
         try {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
-            //database chua ton tai
+            Log.i(TAG, "database chưa tồn tại" );
         }
         if (checkDB != null)
             checkDB.close();
         return checkDB != null ? true : false;
     }
-
     private void copyDataBase() throws IOException {
 
         //mo db trong thu muc assets nhu mot input stream
@@ -112,12 +111,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
-
-    public ArrayList<CauHoi> getRandomQuestion(int n) {
+    public ArrayList<CauHoi> getRandomQuestion(int n)
+    {
         String limit = "0,"+n;
-        ArrayList<CauHoi> ds = new ArrayList<CauHoi>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor contro = db.query(TABLE_NAME,
+        ArrayList<CauHoi> ds=new ArrayList<CauHoi>();
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor contro=db.query(TABLE_NAME,
                 null,//cac cot can lay
                 null, //menh de where
                 null,//doi so menh de where,
@@ -125,9 +124,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,//having
                 "random()",//order by - xap thu tu theo
                 limit//limit - gioi hang so luong can lay
-
         );
-        if (contro.moveToFirst()) {
+        if(contro.moveToFirst()) {
             do {
                 CauHoi x = new CauHoi();
                 x.id = Integer.parseInt(contro.getString(0));
@@ -140,5 +138,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return ds;
     }
-
 }
