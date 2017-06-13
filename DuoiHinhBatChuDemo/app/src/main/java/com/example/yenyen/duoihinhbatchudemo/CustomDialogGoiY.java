@@ -8,45 +8,32 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 /**
  * Created by yenyen on 6/13/2017.
  */
 
-public class CustomDialogHint extends DialogFragment {
-    String text;
-    public void setText(String text) {
-        this.text = text;
+public class CustomDialogGoiY extends DialogFragment {
+    String goiy;
+    public void setGoiy(String goiy) {
+        this.goiy = goiy;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-        dialog.setContentView(R.layout.layout_hint);
+        dialog.setContentView(R.layout.layout_dialog_goi_y);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.findViewById(R.id.btclose).setOnClickListener(new View.OnClickListener() {
+        dialog.findViewById(R.id.btnClose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
-        dialog.findViewById(R.id.btclose2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-        dialog.findViewById(R.id.btGoiY).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
-                dialogGoiY.setCancelable(false);
-                dialogGoiY.show(getFragmentManager(), "cde");
-                dialogGoiY.setGoiy(text);
-                dismiss();
-            }
-        });
+        TextView textView = (TextView) dialog.findViewById(R.id.tvGoiY);
+        textView.setText(goiy);
         return dialog;
     }
 }

@@ -23,6 +23,5 @@
         android:layout_marginLeft="16dp"
         android:textColor="#ffffff"
         android:textSize="30sp"
-        android:textStyle="bold"
-        android:text="Y" />
+        android:textStyle="bold" />
 </RelativeLayout>

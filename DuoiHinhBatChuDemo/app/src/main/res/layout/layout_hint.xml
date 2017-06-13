@@ -53,7 +53,7 @@
                 android:background="@drawable/buttonsuggest"/>
 
             <Button
-                android:id="@+id/button13"
+                android:id="@+id/btGoiY"
                 android:layout_width="wrap_content"
                 android:layout_height="100dp"
                 android:layout_weight="1"
