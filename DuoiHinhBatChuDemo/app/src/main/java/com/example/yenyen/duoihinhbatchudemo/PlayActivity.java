@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class PlayActivity extends AppCompatActivity {
 
     LinearLayout layout1, layout2, layout3;
     ImageView ivImage;
+    Button btHint;
     DatabaseHelper helper;
     int socau = 10;
     int index = 0;
@@ -55,7 +57,16 @@ public class PlayActivity extends AppCompatActivity {
         layout2 = (LinearLayout) findViewById(R.id.frameLayout5);
         layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
         ivImage = (ImageView) findViewById(R.id.ivImage);
+        btHint = (Button) findViewById(R.id.btnhint);
         hienthi();
+        btHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialogHint dialogHint = new CustomDialogHint();
+                dialogHint.setCancelable(false);
+                dialogHint.show(getFragmentManager(), "abc");
+            }
+        });
 
 
     }
@@ -111,6 +122,8 @@ public class PlayActivity extends AppCompatActivity {
                         dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
                         index++;
                         ((TextView) v).setText("");
+                        v.setClickable(false);
+
                     }
                 }
             });
@@ -132,6 +145,8 @@ public class PlayActivity extends AppCompatActivity {
                         dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
                         index++;
                         ((TextView) v).setText("");
+                        v.setClickable(false);
+
                     }
                 }
             });

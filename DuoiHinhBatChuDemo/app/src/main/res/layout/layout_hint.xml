@@ -26,12 +26,47 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
+            <Button
+                android:id="@+id/button14"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:paddingLeft="20dp"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:text="Mở theo thứ tự"
+                android:background="@drawable/buttonsuggest"/>
+
+            <Button
+                android:id="@+id/button15"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:paddingLeft="20dp"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:text="Mở ký tự ngẫu nhiên"
+                android:background="@drawable/buttonsuggest"/>
+
+            <Button
+                android:id="@+id/button13"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:gravity="left|center"
+                android:paddingLeft="20dp"
+                android:textColor="#ffffff"
+                android:textSize="20sp"
+                android:text="Gợi ý trả lời"
+                android:background="@drawable/buttonsuggest"/>
         </LinearLayout>
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btclose2"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:background="@drawable/buttondong"
@@ -49,7 +84,7 @@
         app:srcCompat="@drawable/buttonusernormal" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btclose"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"
