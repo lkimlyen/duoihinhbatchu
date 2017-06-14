@@ -15,10 +15,15 @@ import android.widget.TextView;
  */
 
 public class CustomDialogGoiY extends DialogFragment {
-    String goiy;
+    String goiy,tieude;
     public void setGoiy(String goiy) {
         this.goiy = goiy;
     }
+
+    public void setTieude(String tieude) {
+        this.tieude = tieude;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());
@@ -34,6 +39,8 @@ public class CustomDialogGoiY extends DialogFragment {
         });
         TextView textView = (TextView) dialog.findViewById(R.id.tvGoiY);
         textView.setText(goiy);
+        TextView tvTitle = (TextView) dialog.findViewById(R.id.tvTitle);
+        tvTitle.setText(tieude);
         return dialog;
     }
 }

@@ -5,18 +5,32 @@ package com.example.yenyen.duoihinhbatchudemo;
  */
 
 class CauHoi {
-    int id;
+    int id,status;
     String imagePath, description, shortAnswer, fullAnswer;
 
     public CauHoi() {
     }
 
-    public CauHoi(int id, String imagePath, String description, String shortAnswer, String fullAnswer) {
+    public CauHoi(int id, int status) {
         this.id = id;
+        this.status = status;
+    }
+
+    public CauHoi(int id, int status, String imagePath, String description, String shortAnswer, String fullAnswer) {
+        this.id = id;
+        this.status = status;
         this.imagePath = imagePath;
         this.description = description;
         this.shortAnswer = shortAnswer;
         this.fullAnswer = fullAnswer;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getId() {

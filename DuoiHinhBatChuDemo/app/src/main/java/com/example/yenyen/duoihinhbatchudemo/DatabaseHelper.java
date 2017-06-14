@@ -1,5 +1,6 @@
 package com.example.yenyen.duoihinhbatchudemo;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_SHORTANSWER = "shortAnswer";
     private static final String KEY_FULLANSWER = "fullAnswer";
+    private static final String KEY_STATUS = "status";
 
     private SQLiteDatabase myDataBase;
     Context myContext;
@@ -111,18 +113,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
     }
-    public ArrayList<CauHoi> getRandomQuestion(int n)
+    public ArrayList<CauHoi> getQuestion()
     {
-        String limit = "0,"+n;
+        String limit = "1";
         ArrayList<CauHoi> ds=new ArrayList<CauHoi>();
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor contro=db.query(TABLE_NAME,
                 null,//cac cot can lay
-                null, //menh de where
-                null,//doi so menh de where,
+                "status = ?", //menh de where
+               new String[]{"0"},//doi so menh de where,
                 null,//group by
                 null,//having
-                "random()",//order by - xap thu tu theo
+                null,//order by - xap thu tu theo
                 limit//limit - gioi hang so luong can lay
         );
         if(contro.moveToFirst()) {
@@ -133,9 +135,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 x.description = contro.getString(2);
                 x.shortAnswer = contro.getString(3);
                 x.fullAnswer = contro.getString(4);
+                x.status = Integer.parseInt(contro.getString(5));
                 ds.add(x);
             } while (contro.moveToNext());
         }
         return ds;
+    }
+    public void updateStatus(CauHoi ch) {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues values=new ContentValues();
+        values.put("status",ch.status);
+        db.update(TABLE_NAME,values,"_id=?",new String[]{ch.id+""});
+
     }
 }

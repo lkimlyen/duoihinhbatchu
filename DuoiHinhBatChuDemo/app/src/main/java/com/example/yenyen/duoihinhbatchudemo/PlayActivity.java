@@ -26,11 +26,11 @@ public class PlayActivity extends AppCompatActivity {
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2;
 
-    Button btHint;
+    Button btHint, btLuotChoi;
     DatabaseHelper helper;
-    int socau = 10;
     int index = 0;
     int vitri = 0;
+    int luotchoi = 5;
     CauHoi cauHoi;
     private ArrayList<CauHoi> dsCauHoi;
     String[] kyTu = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
@@ -39,7 +39,7 @@ public class PlayActivity extends AppCompatActivity {
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
     StringBuilder chuoikq;
     String goiy;
-    TextView textview1, textview2, tvSai;
+    TextView textview1, textview2, tvSai, tvCauHoi, tvTien;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class PlayActivity extends AppCompatActivity {
         //helper = new DatabaseHelper(PlayActivity.this);
 
         dsCauHoi = new ArrayList<CauHoi>();
-        dsCauHoi = helper.getRandomQuestion(socau);
+        dsCauHoi = helper.getQuestion();
 
         layout = (LinearLayout) findViewById(R.id.frameLayout7);
         layout1 = (LinearLayout) findViewById(R.id.frameLayout4);
@@ -64,8 +64,12 @@ public class PlayActivity extends AppCompatActivity {
         layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
         ivImage = (ImageView) findViewById(R.id.ivImage);
         btHint = (Button) findViewById(R.id.btnhint);
+        btLuotChoi = (Button) findViewById(R.id.btLuotChoi);
         tvSai = (TextView) findViewById(R.id.tvSai);
         tvSai.setVisibility(View.INVISIBLE);
+        tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
+        tvTien = (TextView) findViewById(R.id.tvTien);
+        tvTien.setText("0");
         hienthi();
         btHint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,10 @@ public class PlayActivity extends AppCompatActivity {
                 dialogHint.setText(goiy);
             }
         });
-
+        if(luotchoi < 5)
+        {
+            //setLuotchoi();
+        }
 
     }
 
@@ -84,6 +91,7 @@ public class PlayActivity extends AppCompatActivity {
         LayoutInflater inf = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         chuoikq = new StringBuilder();
         cauHoi = dsCauHoi.get(vitri);
+        tvCauHoi.setText(String.valueOf(dsCauHoi.get(vitri).id));
         goiy = dsCauHoi.get(vitri).description;
         try {
             InputStream inputStream = getAssets().open(dsCauHoi.get(vitri).imagePath);
@@ -181,15 +189,24 @@ public class PlayActivity extends AppCompatActivity {
                     }
                     if (index == dsODapAn.size()) {
                         if (s.equals(chuoikq.toString())) {
+                            tvSai.setText("Bạn đã chọn đáp án đúng");
+                            tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
                             }
+                            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
+                            helper.updateStatus(ch);
 
                             Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
                             intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+
+                            intent.putExtra("image",dsCauHoi.get(vitri).imagePath);
+                            intent.putExtra("cauhoi",tvCauHoi.getText().toString());
                             startActivity(intent);
                             finish();
                         } else {
+                            luotchoi--;
+                            btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
                             tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
@@ -249,16 +266,25 @@ public class PlayActivity extends AppCompatActivity {
                     }
                     if (index == dsODapAn.size()) {
                         if (s.equals(chuoikq.toString())) {
+                            tvSai.setText("Bạn đã chọn đáp án đúng");
+                            tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
                             }
+                            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
+                            helper.updateStatus(ch);
+
                             Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
                             intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+                            intent.putExtra("image",dsCauHoi.get(vitri).imagePath);
+                            intent.putExtra("cauhoi",tvCauHoi.getText().toString());
                             startActivity(intent);
                             finish();
 
                         } else {
 
+                            luotchoi--;
+                            btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
                             tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
@@ -295,6 +321,20 @@ public class PlayActivity extends AppCompatActivity {
             rowview.setLayoutParams(param);
             layout2.addView(rowview);
         }
+    }
+    public void setLuotchoi()
+    {
+        CountDownTimer timer = new CountDownTimer(30000,1) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                luotchoi++;
+            }
+        };
     }
 
 }
