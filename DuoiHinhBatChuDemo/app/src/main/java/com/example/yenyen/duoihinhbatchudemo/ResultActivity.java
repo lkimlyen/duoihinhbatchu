@@ -12,7 +12,6 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
 
         textView = (TextView) findViewById(R.id.tvKetQua);
-
         textView.setText(getIntent().getStringExtra("kq"));
     }
 }

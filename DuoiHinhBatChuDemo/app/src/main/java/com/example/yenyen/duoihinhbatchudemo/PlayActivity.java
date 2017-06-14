@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -24,6 +25,7 @@ public class PlayActivity extends AppCompatActivity {
 
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2;
+
     Button btHint;
     DatabaseHelper helper;
     int socau = 10;
@@ -37,7 +39,7 @@ public class PlayActivity extends AppCompatActivity {
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
     StringBuilder chuoikq;
     String goiy;
-    TextView textview1, textview2;
+    TextView textview1, textview2, tvSai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class PlayActivity extends AppCompatActivity {
         layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
         ivImage = (ImageView) findViewById(R.id.ivImage);
         btHint = (Button) findViewById(R.id.btnhint);
+        tvSai = (TextView) findViewById(R.id.tvSai);
+        tvSai.setVisibility(View.INVISIBLE);
         hienthi();
         btHint.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,12 +184,39 @@ public class PlayActivity extends AppCompatActivity {
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
                             }
-                        } else {
 
+                            Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
+                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            tvSai.setText("Bạn đã chọn đáp án sai");
+                            tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-
                             }
+                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+                                    dsIVDapAn.clear();
+                                    dsODapAn.clear();
+                                    dsItem.clear();
+                                    layout3.removeAllViews();
+                                    layout2.removeAllViews();
+                                    layout.removeAllViews();
+                                    layout1.removeAllViews();
+                                    index = 0;
+
+                                    tvSai.setVisibility(View.INVISIBLE);
+                                    hienthi();
+                                }
+                            };
+                            timer.start();
                         }
                     }
                 }
@@ -221,16 +252,38 @@ public class PlayActivity extends AppCompatActivity {
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
                             }
-                            Intent intent = new Intent(PlayActivity.this,ResultActivity.class);
-                            intent.putExtra("kq",dsCauHoi.get(vitri).fullAnswer);
+                            Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
+                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
                             startActivity(intent);
+                            finish();
 
                         } else {
 
+                            tvSai.setText("Bạn đã chọn đáp án sai");
+                            tvSai.setVisibility(View.VISIBLE);
                             for (int j = 0; j < dsODapAn.size(); j++) {
                                 dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
                             }
+                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                }
 
+                                @Override
+                                public void onFinish() {
+                                    dsIVDapAn.clear();
+                                    dsODapAn.clear();
+                                    dsItem.clear();
+                                    layout3.removeAllViews();
+                                    layout2.removeAllViews();
+                                    layout.removeAllViews();
+                                    layout1.removeAllViews();
+                                    index = 0;
+                                    tvSai.setVisibility(View.INVISIBLE);
+                                    hienthi();
+                                }
+                            };
+                            timer.start();
                         }
                     }
 

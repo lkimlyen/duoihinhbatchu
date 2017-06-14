@@ -132,27 +132,40 @@
 
     </FrameLayout>
 
-
     <LinearLayout
-        android:id="@+id/frameLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_below="@+id/frameLayout2"
-        >
+        android:gravity="center"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:id="@+id/tvSai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#ffffff" />
+        <LinearLayout
+            android:id="@+id/frameLayout6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
 
+
+
+        </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/frameLayout7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:orientation="horizontal"
         android:layout_below="@id/frameLayout6"
-        android:layout_marginBottom="20dp">
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
     </LinearLayout>
 
@@ -160,11 +173,10 @@
         android:id="@+id/frameLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
         android:layout_above="@+id/frameLayout5"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-       >
+        android:orientation="horizontal">
 
     </LinearLayout>
 
@@ -172,11 +184,10 @@
         android:id="@+id/frameLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        >
+        android:orientation="horizontal">
 
     </LinearLayout>
 
