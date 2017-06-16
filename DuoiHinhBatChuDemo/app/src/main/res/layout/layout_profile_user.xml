@@ -50,7 +50,7 @@
 
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,7 +89,7 @@
                     app:srcCompat="@drawable/profileicontime" />
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tvScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -116,7 +116,7 @@
                     app:srcCompat="@drawable/dolaicon" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/tvMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -154,7 +154,7 @@
                         app:srcCompat="@drawable/profileiconnum" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/tvLuotChoi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -172,7 +172,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button6"
+            android:id="@+id/btChiaSe"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:background="@drawable/buttonchiase"
@@ -190,7 +190,7 @@
         app:srcCompat="@drawable/buttonusernormal" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"

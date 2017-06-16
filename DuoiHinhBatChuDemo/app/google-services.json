@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "616362600138",
+    "firebase_url": "https://duoihinhbatchu-9cee7.firebaseio.com",
+    "project_id": "duoihinhbatchu-9cee7",
+    "storage_bucket": "duoihinhbatchu-9cee7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616362600138:android:06914e38567e0ec9",
+        "android_client_info": {
+          "package_name": "com.example.yenyen.duoihinhbatchudemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "616362600138-t72dhp15e1hu9p3g8fu3p2j51f7e3pev.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkpUqAu9mqbItRrpoKc0yLYN5QeLyE0nM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

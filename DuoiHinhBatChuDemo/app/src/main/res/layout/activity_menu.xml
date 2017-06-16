@@ -42,12 +42,16 @@
             android:layout_weight="1"
             android:background="@drawable/buttonbangxephang" />
 
-        <Button
-            android:id="@+id/button7"
+
+        <ToggleButton
+            android:id="@+id/btmusic"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@drawable/buttonmusic" />
+            android:background="@drawable/buttonmusic"
+            android:textOff=""
+            android:textOn=""
+            />
     </LinearLayout>
 
 </RelativeLayout>
