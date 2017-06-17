@@ -80,12 +80,6 @@ public class ResultPlayOnlineActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot2) {
                             User user = dataSnapshot2.getValue(User.class);
                             dsUser.add(user);
-                            Log.e("CountdsUser", dsUser.size() + "");
-                            for (int i = 0; i< dsUser.size();i++)
-                            {
-                                Log.e("CountdsUserID", dsUser.get(i).id + "");
-                            }
-
                             if (dsUser.size() == dataSnapshot.getChildrenCount()) {
                                 for (int i = 0; i < dsUser.size(); i++) {
                                     if (dsUser.get(i).id.toString().equals(userId)) {

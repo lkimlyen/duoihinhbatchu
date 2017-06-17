@@ -16,11 +16,9 @@ import android.widget.ListView;
 
 public class CustomDialogBXH extends DialogFragment{
    MyAdapterBXH adapterBXH;
-
     public void setAdapterBXH(MyAdapterBXH adapterBXH) {
         this.adapterBXH = adapterBXH;
     }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = new Dialog(getActivity());

@@ -120,6 +120,13 @@ public class PlayActivity extends AppCompatActivity {
 
                 View rowview = inf.inflate(R.layout.layout_item_choose, null);
                 TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+                textview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+
                 ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
                 dsODapAn.add(textview);
                 dsIVDapAn.add(imageview);
@@ -128,7 +135,6 @@ public class PlayActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
                 param.gravity = Gravity.CENTER;
                 rowview.setLayoutParams(param);
-
                 layout3.addView(rowview);
                 layout3.setBackgroundColor(getResources().getColor(android.R.color.white));
 
@@ -174,6 +180,7 @@ public class PlayActivity extends AppCompatActivity {
             textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
             imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
             textview1.setTag(imageView1);
+            dsOChon.add(textview1);
             textview1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -206,8 +213,10 @@ public class PlayActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-
-                            v.setOnClickListener(null);
+                            for (int i =0; i< dsOChon.size();i++)
+                            {
+                                dsOChon.get(i).setClickable(false);
+                            }
                             luotchoi--;
                             btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
@@ -253,6 +262,7 @@ public class PlayActivity extends AppCompatActivity {
             textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
             imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
             textview2.setTag(imageView2);
+            dsOChon.add(textview2);
             textview2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -286,7 +296,10 @@ public class PlayActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            v.setOnClickListener(null);
+                            for (int i =0; i< dsOChon.size();i++)
+                            {
+                                dsOChon.get(i).setClickable(false);
+                            }
                             btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
                             tvSai.setVisibility(View.VISIBLE);

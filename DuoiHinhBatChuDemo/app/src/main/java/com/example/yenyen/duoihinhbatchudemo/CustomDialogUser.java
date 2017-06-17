@@ -24,7 +24,6 @@ public class CustomDialogUser extends DialogFragment {
     }
 
     String image;
-    private int counter = 0;
 
     public void setName(String name) {
         this.name = name;
@@ -66,42 +65,5 @@ public class CustomDialogUser extends DialogFragment {
         ImageView imageView = (ImageView) dialog.findViewById(R.id.ivAvatar);
         new ImageLoadTask(image, imageView).execute();
         return dialog;
-//    }
-//    public void postPicture() {
-//        //check counter
-//        if(counter == 0) {
-//            //save the screenshot
-//            View rootView = findViewById(android.R.id.content).getRootView();
-//            rootView.setDrawingCacheEnabled(true);
-//            // creates immutable clone of image
-//            image = Bitmap.createBitmap(rootView.getDrawingCache());
-//            // destroy
-//            rootView.destroyDrawingCache();
-//
-//            //share dialog
-//            AlertDialog.Builder shareDialog = new AlertDialog.Builder(getActivity());
-//            shareDialog.setTitle("Share Screen Shot");
-//            shareDialog.setMessage("Share image to Facebook?");
-//            shareDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    //share the image to Facebook
-//                    SharePhoto photo = new SharePhoto.Builder().setBitmap(image).build();
-//                    SharePhotoContent content = new SharePhotoContent.Builder().addPhoto(photo).build();
-//                    shareButton.setShareContent(content);
-//                    counter = 1;
-//                    shareButton.performClick();
-//                }
-//            });
-//            shareDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.cancel();
-//                }
-//            });
-//            shareDialog.show();
-//        }
-//        else {
-//            counter = 0;
-//            shareButton.setShareContent(null);
-//        }
     }
 }

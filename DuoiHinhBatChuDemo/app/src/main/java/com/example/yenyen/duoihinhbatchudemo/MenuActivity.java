@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.facebook.Profile;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,16 +26,16 @@ public class MenuActivity extends AppCompatActivity {
     ToggleButton btmusic;
     MediaPlayer player;
     boolean mBool = true;
-    String name, id;
+    String name, id,userId;
     String image;
-    Integer score = 1;
-    Integer money = 100;
     Button btProfile, btChoiNgay, btBXH;
     DatabaseReference mDatabase;
     MyAdapterBXH adapterBXH;
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dsId = new ArrayList<>();
     Boolean aBoolean = true;
+    private FirebaseAuth mAuth;
+    int score, money;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +43,16 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mUser = mAuth.getCurrentUser();
+        getUser(mUser);
+
         btmusic = (ToggleButton) findViewById(R.id.btmusic);
         btProfile = (Button) findViewById(R.id.btProfile);
         btChoiNgay = (Button) findViewById(R.id.btChoiNgay);
         btBXH = (Button) findViewById(R.id.btBXH);
         getValueFromMainActivity();
 
-        adapterBXH = new MyAdapterBXH(MenuActivity.this, R.layout.layout_listview_item_bxh, dsUser);
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
@@ -55,6 +60,8 @@ public class MenuActivity extends AppCompatActivity {
                     mDatabase.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot2) {
+                            User user = dataSnapshot2.getValue(User.class);
+                            dsUser.add(user);
                             for (DataSnapshot postSnapshot : dataSnapshot2.getChildren()) {
                                 String key = postSnapshot.getKey().toString();
                                 if (key.equals("id")) {
@@ -64,34 +71,16 @@ public class MenuActivity extends AppCompatActivity {
 
                                 }
                             }
-                            int count = dsId.size();
-                            int dem = 0;
-
-                            Log.d("countdsId", count + "");
                             if (dsId.size() == dataSnapshot.getChildrenCount() && aBoolean == true) {
-                                if (id != null) {
-                                    if (count > 0) {
-                                        for (int i = 0; i < count; i++) {
-                                            if (dsId.get(i).toString().equals(id)) {
-                                                dem++;
-                                                Log.d("dem", dem + "");
-                                            }
-                                        }
-                                        if (dem > 0) {
-                                            Log.d("PushServer", "Push không thành công");
+                                insertUser();
 
-                                        } else {
-                                            User user = new User(id, name, image, score, money);
-                                            mDatabase.push().setValue(user);
-                                            Toast.makeText(MenuActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
-                                            aBoolean = false;
-                                        }
-                                    } else {
-                                        User user = new User(id, name, image, score, money);
-                                        mDatabase.push().setValue(user);
-                                        Toast.makeText(MenuActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
-                                        aBoolean = false;
-
+                            }
+                            if (dsUser.size() == dataSnapshot.getChildrenCount()) {
+                                for (int i = 0; i < dsUser.size(); i++) {
+                                    if (dsUser.get(i).id.toString().equals(userId)) {
+                                        score = dsUser.get(i).score;
+                                        money = dsUser.get(i).money;
+                                        goiDiaglogUser();
                                     }
                                 }
                             }
@@ -110,7 +99,6 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
-
         SharedPreferences lay = getPreferences(MODE_PRIVATE);
         mBool = lay.getBoolean("boolean", true);
 
@@ -131,9 +119,7 @@ public class MenuActivity extends AppCompatActivity {
             player.pause();
         }
 
-        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-
-        {
+        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Log.i("boolean", String.valueOf(isChecked));
@@ -149,40 +135,9 @@ public class MenuActivity extends AppCompatActivity {
                 }
             }
         });
-        btProfile.setOnClickListener(new View.OnClickListener()
 
-        {
-            @Override
-            public void onClick(View v) {
-                CustomDialogUser dialogUser = new CustomDialogUser();
-                dialogUser.setCancelable(false);
-                dialogUser.show(getFragmentManager(), "abc");
-                dialogUser.setName(name);
-                dialogUser.setImage(image);
-            }
-        });
+        btChoiNgay();
 
-        btChoiNgay.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuActivity.this, PlayOnlineActivity.class);
-                intent.putExtra("image", image);
-                startActivity(intent);
-            }
-        });
-        btBXH.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                CustomDialogBXH dialogBXH = new CustomDialogBXH();
-                dialogBXH.setCancelable(false);
-                dialogBXH.show(getFragmentManager(), "abc");
-                dialogBXH.setAdapterBXH(adapterBXH);
-            }
-        });
     }
 
     @Override
@@ -214,6 +169,82 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void insertUser() {
+        int count = dsId.size();
+        int dem = 0;
 
+        if (id != null) {
+            if (count > 0) {
+                for (int i = 0; i < count; i++) {
+                    if (dsId.get(i).toString().equals(id)) {
+                        dem++;
+                    }
+                }
+                if (dem > 0) {
+                    Log.d("PushServer", "Push không thành công");
+
+                } else {
+                    User user = new User(id, name, image, 1, 100);
+                    mDatabase.push().setValue(user);
+                    aBoolean = false;
+                }
+            } else {
+                User user = new User(id, name, image, 1, 100);
+                mDatabase.push().setValue(user);
+                aBoolean = false;
+
+            }
+
+        }
+    }
+
+    public void goiDiaglogUser() {
+        btProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialogUser dialogUser = new CustomDialogUser();
+                dialogUser.setCancelable(false);
+                dialogUser.show(getFragmentManager(), "abc");
+                dialogUser.setName(name);
+                dialogUser.setImage(image);
+                dialogUser.setMoney(money);
+                dialogUser.setScore(score);
+            }
+        });
+    }
+
+    public void btChoiNgay() {
+        btChoiNgay.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MenuActivity.this, PlayOnlineActivity.class);
+                intent.putExtra("image", image);
+                startActivity(intent);
+            }
+        });
+    }
+    private void getUser(FirebaseUser user) {
+        if (user != null) {
+            userId = Profile.getCurrentProfile().getId();
+        }
+    }
+    public  void goiDialogBXH()
+    {
+        adapterBXH = new MyAdapterBXH(MenuActivity.this, R.layout.layout_listview_item_bxh, dsUser);
+        //adapterBXH.notifyDataSetChanged();
+        btBXH.setOnClickListener(new View.OnClickListener()
+
+        {
+            @Override
+            public void onClick(View v) {
+                CustomDialogBXH dialogBXH = new CustomDialogBXH();
+                dialogBXH.setCancelable(false);
+                dialogBXH.show(getFragmentManager(), "abc");
+                dialogBXH.setAdapterBXH(adapterBXH);
+
+
+            }
+        });
     }
 }
