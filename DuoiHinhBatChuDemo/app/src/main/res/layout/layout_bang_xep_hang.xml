@@ -22,6 +22,7 @@
             android:textSize="30dp" />
 
         <ListView
+            android:id="@+id/dsUser"
             android:layout_width="330dp"
             android:layout_height="320dp"
             android:layout_marginTop="95dp"
@@ -49,7 +50,7 @@
         app:srcCompat="@drawable/iconbangxephang" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"

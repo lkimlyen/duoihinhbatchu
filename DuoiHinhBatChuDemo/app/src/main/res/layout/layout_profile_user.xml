@@ -34,7 +34,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/ivAvatar"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="top|center"
@@ -171,13 +171,14 @@
             </LinearLayout>
         </LinearLayout>
 
-        <Button
+        <com.facebook.share.widget.ShareButton
             android:id="@+id/btChiaSe"
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:background="@drawable/buttonchiase"
             android:layout_gravity="bottom|center"
-            android:layout_marginBottom="40dp"/>
+            android:layout_marginBottom="40dp"
+            android:text=""/>
 
     </FrameLayout>
 

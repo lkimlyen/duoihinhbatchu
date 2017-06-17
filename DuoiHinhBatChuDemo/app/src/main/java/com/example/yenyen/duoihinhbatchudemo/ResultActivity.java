@@ -33,7 +33,6 @@ public class ResultActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         tvCauHoi.setText(getIntent().getStringExtra("cauhoi"));
-
         textView.setText(getIntent().getStringExtra("kq"));
 
         btChoiTiep = (Button) findViewById(R.id.btChoiTiep);

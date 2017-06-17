@@ -9,16 +9,27 @@ import java.io.Serializable;
 public class User implements Serializable{
     String id;
     String name;
+    String image;
     Integer score, money;
 
     public User() {
+
     }
 
-    public User(String id, String name, Integer score, Integer money) {
+    public User(String id, String name, String image, Integer score, Integer money) {
         this.id = id;
         this.name = name;
+        this.image = image;
         this.score = score;
         this.money = money;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getId() {

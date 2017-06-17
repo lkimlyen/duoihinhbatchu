@@ -29,8 +29,9 @@
 
         <activity android:name=".MenuActivity" />
         <activity android:name=".ResultActivity" />
-        <activity android:name=".PlayActivity"></activity>
-        <activity android:name=".PlayOnlineActivity"></activity>
+        <activity android:name=".PlayActivity" />
+        <activity android:name=".PlayOnlineActivity" />
+        <activity android:name=".ResultPlayOnlineActivity"></activity>
     </application>
 
 </manifest>

@@ -37,6 +37,7 @@ public class PlayActivity extends AppCompatActivity {
     ArrayList<String> dsItem = new ArrayList<>();
     ArrayList<TextView> dsODapAn = new ArrayList<>();
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
+    ArrayList<TextView> dsOChon = new ArrayList<>();
     StringBuilder chuoikq;
     String goiy;
     TextView textview1, textview2, tvSai, tvCauHoi, tvTien;
@@ -169,7 +170,7 @@ public class PlayActivity extends AppCompatActivity {
         final String s = shortAnswer.replace(",", "");
         ////chỗ này show ra các để chọn
         for (int i = 0; i < 8; i++) {
-            View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+          View rowview = inf.inflate(R.layout.layout_item_choose1, null);
             textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
             imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
             textview1.setTag(imageView1);
@@ -205,6 +206,8 @@ public class PlayActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
+
+                            v.setOnClickListener(null);
                             luotchoi--;
                             btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
@@ -246,7 +249,7 @@ public class PlayActivity extends AppCompatActivity {
         }
 
         for (int j = 8; j < 16; j++) {
-            View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+            final View rowview = inf.inflate(R.layout.layout_item_choose1, null);
             textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
             imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
             textview2.setTag(imageView2);
@@ -261,6 +264,7 @@ public class PlayActivity extends AppCompatActivity {
                         index++;
                         ((TextView) v).setText("");
                         v.setClickable(false);
+
                         ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
 
                     }
@@ -282,8 +286,7 @@ public class PlayActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-
-                            luotchoi--;
+                            v.setOnClickListener(null);
                             btLuotChoi.setText(String.valueOf(luotchoi));
                             tvSai.setText("Bạn đã chọn đáp án sai");
                             tvSai.setVisibility(View.VISIBLE);

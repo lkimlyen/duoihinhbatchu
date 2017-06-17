@@ -8,7 +8,7 @@
     tools:context="com.example.yenyen.duoihinhbatchudemo.MenuActivity">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btChoiNgay"
         android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -21,7 +21,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/button3"
+        android:layout_alignTop="@+id/btChoiNgay"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp"
         android:orientation="horizontal"
@@ -29,14 +29,14 @@
         >
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btProfile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:background="@drawable/buttonprofile" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btBXH"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="1"
