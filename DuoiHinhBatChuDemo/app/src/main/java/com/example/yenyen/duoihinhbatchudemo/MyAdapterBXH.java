@@ -38,9 +38,9 @@ public class MyAdapterBXH extends ArrayAdapter<User> implements Serializable{
         TextView name = (TextView) convertView.findViewById(R.id.tvName);
         name.setText(users.get(position).name);
         TextView score = (TextView) convertView.findViewById(R.id.tvScore);
-        score.setText(users.get(position).score);
+        score.setText(String.valueOf(users.get(position).score));
         ImageView imageView = (ImageView) convertView.findViewById(R.id.ivAvatar);
         new ImageLoadTask(users.get(position).image,imageView).execute();
-        return super.getView(position, convertView, parent);
+        return convertView;
     }
 }

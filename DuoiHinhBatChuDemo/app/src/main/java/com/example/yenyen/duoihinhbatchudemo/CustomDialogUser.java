@@ -66,4 +66,5 @@ public class CustomDialogUser extends DialogFragment {
         new ImageLoadTask(image, imageView).execute();
         return dialog;
     }
+
 }

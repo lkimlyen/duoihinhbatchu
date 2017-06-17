@@ -21,18 +21,22 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MenuActivity extends AppCompatActivity {
     ToggleButton btmusic;
     MediaPlayer player;
     boolean mBool = true;
-    String name, id,userId;
+    String name, id, userId;
     String image;
     Button btProfile, btChoiNgay, btBXH;
     DatabaseReference mDatabase;
     MyAdapterBXH adapterBXH;
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dsId = new ArrayList<>();
+    ArrayList<User> Users = new ArrayList<>();
+
     Boolean aBoolean = true;
     private FirebaseAuth mAuth;
     int score, money;
@@ -76,13 +80,9 @@ public class MenuActivity extends AppCompatActivity {
 
                             }
                             if (dsUser.size() == dataSnapshot.getChildrenCount()) {
-                                for (int i = 0; i < dsUser.size(); i++) {
-                                    if (dsUser.get(i).id.toString().equals(userId)) {
-                                        score = dsUser.get(i).score;
-                                        money = dsUser.get(i).money;
-                                        goiDiaglogUser();
-                                    }
-                                }
+                                goiDiaglogUser();
+                                goiDialogBXH();
+
                             }
                         }
 
@@ -99,6 +99,7 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
+
         SharedPreferences lay = getPreferences(MODE_PRIVATE);
         mBool = lay.getBoolean("boolean", true);
 
@@ -193,23 +194,29 @@ public class MenuActivity extends AppCompatActivity {
                 aBoolean = false;
 
             }
-
         }
     }
 
     public void goiDiaglogUser() {
-        btProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CustomDialogUser dialogUser = new CustomDialogUser();
-                dialogUser.setCancelable(false);
-                dialogUser.show(getFragmentManager(), "abc");
-                dialogUser.setName(name);
-                dialogUser.setImage(image);
-                dialogUser.setMoney(money);
-                dialogUser.setScore(score);
+        for (int i = 0; i < dsUser.size(); i++) {
+            if (dsUser.get(i).id.toString().equals(userId)) {
+                score = dsUser.get(i).score;
+                money = dsUser.get(i).money;
+                btProfile.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CustomDialogUser dialogUser = new CustomDialogUser();
+                        dialogUser.setCancelable(false);
+                        dialogUser.show(getFragmentManager(), "abc");
+                        dialogUser.setName(name);
+                        dialogUser.setImage(image);
+                        dialogUser.setMoney(money);
+                        dialogUser.setScore(score);
+                    }
+                });
+                break;
             }
-        });
+        }
     }
 
     public void btChoiNgay() {
@@ -224,15 +231,22 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
+
     private void getUser(FirebaseUser user) {
         if (user != null) {
             userId = Profile.getCurrentProfile().getId();
         }
     }
-    public  void goiDialogBXH()
-    {
-        adapterBXH = new MyAdapterBXH(MenuActivity.this, R.layout.layout_listview_item_bxh, dsUser);
-        //adapterBXH.notifyDataSetChanged();
+
+    public void goiDialogBXH() {
+        Collections.sort(dsUser, new Comparator<User>(){
+            public int compare(User o1, User o2){
+                if(o1.score == o2.score)
+                    return 0;
+                return o1.score > o2.score ? -1 : 1;
+            }
+        });
+        Log.d("dsUser.count",dsUser.size()+"");
         btBXH.setOnClickListener(new View.OnClickListener()
 
         {
@@ -241,9 +255,8 @@ public class MenuActivity extends AppCompatActivity {
                 CustomDialogBXH dialogBXH = new CustomDialogBXH();
                 dialogBXH.setCancelable(false);
                 dialogBXH.show(getFragmentManager(), "abc");
-                dialogBXH.setAdapterBXH(adapterBXH);
-
-
+                dialogBXH.setUsers(dsUser);
+                dialogBXH.setContext(MenuActivity.this);
             }
         });
     }
