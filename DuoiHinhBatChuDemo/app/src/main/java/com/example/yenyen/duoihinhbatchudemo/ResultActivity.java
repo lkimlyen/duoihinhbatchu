@@ -3,7 +3,6 @@ package com.example.yenyen.duoihinhbatchudemo;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends BaseActivity {
     TextView textView, tvCauHoi;
     ImageView imageView;
     Button btChoiTiep;

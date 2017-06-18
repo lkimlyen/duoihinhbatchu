@@ -23,17 +23,15 @@
 
             <ImageView
                 android:id="@+id/ivAvatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="42dp"
+                android:layout_height="45dp"
                 android:layout_marginLeft="22dp"
-                android:layout_marginTop="3dp"
                 app:srcCompat="@drawable/avatar" />
 
             <ImageView
-                android:id="@+id/imageView12"
+                android:id="@+id/ivAvatarKhung"
                 android:layout_width="163dp"
                 android:layout_height="50dp"
-
                 app:srcCompat="@drawable/avataricon" />
 
             <TextView
@@ -42,9 +40,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginStart="60dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="13dp"
                 android:gravity="center"
-                android:text="1000"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:textStyle="bold" />
 
             <Button
@@ -58,7 +58,9 @@
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/buttontim"
-                android:text="5" />
+                android:text="5"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="#ffffff"/>
 
         </FrameLayout>
 
@@ -97,12 +99,13 @@
                 android:id="@+id/tvTien"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="17dp"
                 android:gravity="right"
                 android:text="1000"
                 android:textColor="#ffffff"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.FontPath"/>
         </FrameLayout>
 
     </LinearLayout>
@@ -123,7 +126,7 @@
             />
 
         <ImageView
-            android:id="@+id/imageView15"
+            android:id="@+id/ivPictureBorder"
             android:layout_width="wrap_content"
             android:layout_height="250dp"
             app:srcCompat="@drawable/pictureborder"
@@ -145,7 +148,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#ffffff" />
+            android:textColor="#ffffff"
+            android:textAppearance="@style/TextAppearance.FontPath"/>
         <LinearLayout
             android:id="@+id/frameLayout6"
             android:layout_width="match_parent"

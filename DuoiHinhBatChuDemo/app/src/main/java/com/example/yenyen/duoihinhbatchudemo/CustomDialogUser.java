@@ -64,6 +64,20 @@ public class CustomDialogUser extends DialogFragment {
         money.setText(String.valueOf(this.money));
         ImageView imageView = (ImageView) dialog.findViewById(R.id.ivAvatar);
         new ImageLoadTask(image, imageView).execute();
+        ImageView ivIconUser = (ImageView) dialog.findViewById(R.id.ivIconUser);
+        ivIconUser.setImageResource(R.drawable.buttonusernormal);
+        ImageView ivIconNum = (ImageView) dialog.findViewById(R.id.ivIconNum);
+        ivIconNum.setImageResource(R.drawable.profileiconnum);
+        ImageView ivTim = (ImageView) dialog.findViewById(R.id.ivTim);
+        ivTim.setImageResource(R.drawable.profilebtntim);
+        ImageView ivDolaIcon = (ImageView) dialog.findViewById(R.id.ivDolaIcon);
+        ivDolaIcon.setImageResource(R.drawable.dolaicon);
+        ImageView ivIconTime = (ImageView) dialog.findViewById(R.id.ivIconTime);
+        ivIconTime.setImageResource(R.drawable.profileicontime);
+        ImageView ivProfileKhung = (ImageView) dialog.findViewById(R.id.ivProfileKhung);
+        ivProfileKhung.setImageResource(R.drawable.profilekhung);
+        ImageView ivAvatarKhung = (ImageView) dialog.findViewById(R.id.ivAvatarKhung);
+        ivAvatarKhung.setImageResource(R.drawable.listfriendavatarholder);
         return dialog;
     }
 

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -45,8 +44,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PlayOnlineActivity extends AppCompatActivity {
-    ImageView ivAvatar;
+public class PlayOnlineActivity extends BaseActivity {
+    ImageView ivAvatar,ivPictureBorder,ivAvatarKhung;
     String image, id, goiy, imagename;
     TextView tvCauHoi, tvTien;
     DatabaseReference mDatabase, getmDatabase;
@@ -80,6 +79,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
         mAd = MobileAds.getRewardedVideoAdInstance(this);
 
         anhXa();
+        setImageView();
         getData();
         getUser(mUser);
 
@@ -101,7 +101,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
 
                                         tvCauHoi.setText(String.valueOf(dsUser.get(i).score));
                                         int cauhoi = dsUser.get(i).score - 1;
-                                        tvTien.setText(String.valueOf(dsUser.get(i).money));
+                                        tvTien.setText(dsUser.get(i).money + "$");
                                         setBtHint(i);
                                         mAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
                                             @Override
@@ -213,8 +213,14 @@ public class PlayOnlineActivity extends AppCompatActivity {
         tvSai = (TextView) findViewById(R.id.tvSai);
         tvSai.setVisibility(View.INVISIBLE);
         btInvite = (Button) findViewById(R.id.btInvite);
+        ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
+        ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
     }
-
+private void setImageView()
+{
+    ivAvatarKhung.setImageResource(R.drawable.avataricon);
+    ivPictureBorder.setImageResource(R.drawable.pictureborder);
+}
     private void getUser(FirebaseUser user) {
 
         if (user != null) {
@@ -282,6 +288,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
         View rowview = inf.inflate(R.layout.layout_item_choose1, null);
         textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
         imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        imageView2.setImageResource(R.drawable.tilehover);
         textview2.setTag(imageView2);
         textview2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,6 +321,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
         View rowview = inf.inflate(R.layout.layout_item_choose1, null);
         textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
         imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        imageView1.setImageResource(R.drawable.tilehover);
         textview1.setTag(imageView1);
         textview1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,6 +354,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
         View rowview = inf.inflate(R.layout.layout_item_choose, null);
         TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
         ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        imageview.setImageResource(R.drawable.tileempty);
         dsODapAn.add(textview);
         dsIVDapAn.add(imageview);
         Resources r = getResources();
@@ -360,6 +369,7 @@ public class PlayOnlineActivity extends AppCompatActivity {
         View rowview = inf.inflate(R.layout.layout_item_choose, null);
         TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
         ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        imageview.setImageResource(R.drawable.tileempty);
         dsODapAn.add(textview);
         dsIVDapAn.add(imageview);
         Resources r = getResources();

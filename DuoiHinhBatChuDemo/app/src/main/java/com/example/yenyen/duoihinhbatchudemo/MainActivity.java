@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     MediaPlayer mp;
     DatabaseReference mDatabase;
     Button btChoiThu;
@@ -164,15 +163,6 @@ public class MainActivity extends AppCompatActivity {
 
                 });
     }
-
-    public void signOut() {
-        mAuth.signOut();
-        LoginManager.getInstance().logOut();
-        updateUI(null);
-
-    }
-
-
     private void updateUI(FirebaseUser user) {
 
         if (user != null) {
@@ -213,5 +203,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 }

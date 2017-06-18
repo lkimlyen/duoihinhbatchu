@@ -14,10 +14,11 @@
         android:id="@+id/tvKyTu"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:text="T"
         android:gravity="center"
         android:textStyle="bold"
         android:textSize="23sp"
         android:textColor="#ffffff"
+
+        android:textAppearance="@style/TextAppearance.FontPath"
        />
 </FrameLayout>

@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +20,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PlayActivity extends AppCompatActivity {
+public class PlayActivity extends BaseActivity {
 
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2;

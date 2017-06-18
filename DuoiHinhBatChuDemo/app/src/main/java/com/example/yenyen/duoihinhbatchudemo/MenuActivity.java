@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +13,7 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,13 +26,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends BaseActivity {
     ToggleButton btmusic;
     MediaPlayer player;
     boolean mBool = true;
-    String name, id, userId;
-    String image;
-    Button btProfile, btChoiNgay, btBXH;
+    String name, image, id, userId;
+    Button btProfile, btChoiNgay, btBXH, btLogout;
     DatabaseReference mDatabase;
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dsId = new ArrayList<>();
@@ -54,6 +53,8 @@ public class MenuActivity extends AppCompatActivity {
         btProfile = (Button) findViewById(R.id.btProfile);
         btChoiNgay = (Button) findViewById(R.id.btChoiNgay);
         btBXH = (Button) findViewById(R.id.btBXH);
+        btLogout = (Button) findViewById(R.id.btLogout);
+
         getValueFromMainActivity();
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,9 +100,9 @@ public class MenuActivity extends AppCompatActivity {
 
 
         setMusic();
-
         btChoiNgay();
         showProgressDialog();
+        setBtLogout();
 
     }
 
@@ -118,7 +119,20 @@ public class MenuActivity extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
     }
 
+    public void setBtLogout() {
+        btLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                LoginManager.getInstance().logOut();
+                getUser(null);
+                Intent intent = new Intent(MenuActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
 
+            }
+        });
+    }
 
     public void insertUser() {
         int count = dsId.size();
@@ -190,16 +204,16 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void goiDialogBXH() {
-        Collections.sort(dsUser, new Comparator<User>(){
-            public int compare(User o1, User o2){
-                if(o1.score == o2.score)
+        Collections.sort(dsUser, new Comparator<User>() {
+            public int compare(User o1, User o2) {
+                if (o1.score == o2.score)
                     return 0;
                 return o1.score >
 
                         o2.score ? -1 : 1;
             }
         });
-        Log.d("dsUser.count",dsUser.size()+"");
+        Log.d("dsUser.count", dsUser.size() + "");
         btBXH.setOnClickListener(new View.OnClickListener()
 
         {
@@ -213,8 +227,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
     }
-    public void setMusic()
-    {
+
+    public void setMusic() {
         SharedPreferences lay = getPreferences(MODE_PRIVATE);
         mBool = lay.getBoolean("boolean", true);
         btmusic.setChecked(mBool);
@@ -262,12 +276,12 @@ public class MenuActivity extends AppCompatActivity {
         });
 
     }
-    private void showProgressDialog()
-    {
+
+    private void showProgressDialog() {
         final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
-        pd.setMessage("loading");
+        pd.setMessage("Đang tải dữ liệu...");
         pd.show();
-        CountDownTimer countDownTimer = new CountDownTimer(10000,1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
 

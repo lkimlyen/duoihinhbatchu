@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/mainbg"
-
     tools:context="com.example.yenyen.duoihinhbatchudemo.MainActivity">
 
 
     <com.facebook.login.widget.LoginButton
-    android:layout_gravity="center_horizontal"
 
+         android:layout_gravity="center_horizontal"
         android:id="@+id/btDangNhap"
         android:layout_width="200dp"
         android:layout_height="50dp"
@@ -23,7 +22,8 @@
         android:textStyle="bold"
         android:textColor="#ffffff"
         android:layout_above="@+id/btChoiThu"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@style/TextAppearance.FontPath"/>
 
     <ImageView
         android:id="@+id/imageView"
