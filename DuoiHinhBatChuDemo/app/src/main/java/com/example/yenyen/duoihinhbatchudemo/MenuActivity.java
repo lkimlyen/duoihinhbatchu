@@ -1,9 +1,11 @@
 package com.example.yenyen.duoihinhbatchudemo;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -32,11 +34,8 @@ public class MenuActivity extends AppCompatActivity {
     String image;
     Button btProfile, btChoiNgay, btBXH;
     DatabaseReference mDatabase;
-    MyAdapterBXH adapterBXH;
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dsId = new ArrayList<>();
-    ArrayList<User> Users = new ArrayList<>();
-
     Boolean aBoolean = true;
     private FirebaseAuth mAuth;
     int score, money;
@@ -71,8 +70,6 @@ public class MenuActivity extends AppCompatActivity {
                                 if (key.equals("id")) {
                                     String value = postSnapshot.getValue().toString();
                                     dsId.add(value);
-                                    Log.e("Get Data", key + value);
-
                                 }
                             }
                             if (dsId.size() == dataSnapshot.getChildrenCount() && aBoolean == true) {
@@ -100,44 +97,11 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences lay = getPreferences(MODE_PRIVATE);
-        mBool = lay.getBoolean("boolean", true);
 
-        btmusic.setChecked(mBool);
-
-        player = MediaPlayer.create(MenuActivity.this, R.raw.intro);
-        if (btmusic.isChecked())
-
-        {
-            player.setLooping(true);
-            player.setVolume(100, 100);
-            player.start();
-
-        } else
-
-        {
-            player.start();
-            player.pause();
-        }
-
-        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.i("boolean", String.valueOf(isChecked));
-                if (isChecked) {
-                    mBool = true;
-                    player.setLooping(true);
-                    player.setVolume(100, 100);
-                    player.start();
-                } else {
-                    mBool = false;
-                    player.start();
-                    player.pause();
-                }
-            }
-        });
+        setMusic();
 
         btChoiNgay();
+        showProgressDialog();
 
     }
 
@@ -145,11 +109,7 @@ public class MenuActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         player.stop();
-        boolean x = mBool;
-        SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = ghi.edit();
-        editor.putBoolean("boolean", x);
-        editor.commit();
+
     }
 
     public void getValueFromMainActivity() {
@@ -158,16 +118,7 @@ public class MenuActivity extends AppCompatActivity {
         id = getIntent().getStringExtra("id");
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        player.stop();
-        boolean x = mBool;
-        SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = ghi.edit();
-        editor.putBoolean("boolean", x);
-        editor.commit();
-    }
+
 
     public void insertUser() {
         int count = dsId.size();
@@ -243,7 +194,9 @@ public class MenuActivity extends AppCompatActivity {
             public int compare(User o1, User o2){
                 if(o1.score == o2.score)
                     return 0;
-                return o1.score > o2.score ? -1 : 1;
+                return o1.score >
+
+                        o2.score ? -1 : 1;
             }
         });
         Log.d("dsUser.count",dsUser.size()+"");
@@ -259,5 +212,72 @@ public class MenuActivity extends AppCompatActivity {
                 dialogBXH.setContext(MenuActivity.this);
             }
         });
+    }
+    public void setMusic()
+    {
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        mBool = lay.getBoolean("boolean", true);
+        btmusic.setChecked(mBool);
+
+        player = MediaPlayer.create(MenuActivity.this, R.raw.intro);
+        if (btmusic.isChecked())
+
+        {
+            player.setLooping(true);
+            player.setVolume(100, 100);
+            player.start();
+
+        } else
+
+        {
+            player.start();
+            player.pause();
+        }
+
+        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i("boolean", String.valueOf(isChecked));
+                if (isChecked) {
+                    mBool = true;
+                    player.setLooping(true);
+                    player.setVolume(100, 100);
+                    player.start();
+                    boolean x = mBool;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putBoolean("boolean", x);
+                    editor.commit();
+                } else {
+                    mBool = false;
+                    player.start();
+                    player.pause();
+                    boolean x = mBool;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putBoolean("boolean", x);
+                    editor.commit();
+                }
+            }
+        });
+
+    }
+    private void showProgressDialog()
+    {
+        final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
+        pd.setMessage("loading");
+        pd.show();
+        CountDownTimer countDownTimer = new CountDownTimer(10000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                pd.dismiss();
+            }
+        };
+        countDownTimer.start();
     }
 }

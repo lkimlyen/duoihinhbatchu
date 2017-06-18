@@ -10,18 +10,16 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         app:srcCompat="@drawable/tileempty"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+       />
 
     <TextView
         android:id="@+id/tvKyTu2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:maxLength="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="16dp"
+        android:gravity="center"
+        android:text="T"
         android:textColor="#ffffff"
-        android:textSize="30sp"
+        android:textSize="23sp"
         android:textStyle="bold" />
 </RelativeLayout>

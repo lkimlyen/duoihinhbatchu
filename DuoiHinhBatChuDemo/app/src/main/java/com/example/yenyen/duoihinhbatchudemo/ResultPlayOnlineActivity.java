@@ -1,6 +1,7 @@
 package com.example.yenyen.duoihinhbatchudemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
@@ -39,7 +39,6 @@ public class ResultPlayOnlineActivity extends AppCompatActivity {
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dskey = new ArrayList<>();
     String userId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +90,7 @@ public class ResultPlayOnlineActivity extends AppCompatActivity {
                                         Log.d("money", String.valueOf(money));
                                         mDatabase.child(dskey.get(i)).child("score").setValue(score);
                                         mDatabase.child(dskey.get(i)).child("money").setValue(money);
-                                        Toast.makeText(ResultPlayOnlineActivity.this, "Thanhf coong", Toast.LENGTH_SHORT).show();
+
                                     }
                                 }
                             }
@@ -113,12 +112,19 @@ public class ResultPlayOnlineActivity extends AppCompatActivity {
             }
         });
 
+
         btChoiTiep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean x = true;
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putBoolean("boolean", x);
+                editor.commit();
                 Intent intent = new Intent(ResultPlayOnlineActivity.this, PlayOnlineActivity.class);
                 startActivity(intent);
                 finish();
+
             }
         });
 

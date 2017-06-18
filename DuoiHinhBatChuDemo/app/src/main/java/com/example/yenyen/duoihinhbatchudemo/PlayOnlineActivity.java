@@ -1,7 +1,9 @@
 package com.example.yenyen.duoihinhbatchudemo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -15,10 +17,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.share.model.AppInviteContent;
+import com.facebook.share.widget.AppInviteDialog;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +47,7 @@ import java.util.Collections;
 
 public class PlayOnlineActivity extends AppCompatActivity {
     ImageView ivAvatar;
-    String image, id;
+    String image, id, goiy, imagename;
     TextView tvCauHoi, tvTien;
     DatabaseReference mDatabase, getmDatabase;
     private FirebaseAuth mAuth;
@@ -42,72 +55,106 @@ public class PlayOnlineActivity extends AppCompatActivity {
     ArrayList<String> dsKey = new ArrayList<>();
     ArrayList<CauHoi> dsCauHoi = new ArrayList<>();
     LinearLayout layout, layout1, layout2, layout3;
-    ImageView ivImage, imageView1, imageView2;
+    ImageView ivImage, imageView1, imageView2, ivTien;
     StorageReference storageRef;
-    Button btHint, btLuotChoi;
+    Button btHint, btLuotChoi, btInvite;
     String[] kyTu = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     ArrayList<String> dsItem = new ArrayList<>();
     ArrayList<TextView> dsODapAn = new ArrayList<>();
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
     StringBuilder chuoikq;
-    String goiy;
     TextView textview1, textview2, tvSai;
     int vitri = 0;
     int index = 0;
     FirebaseStorage storage;
-    String imagename;
+    FirebaseUser mUser;
+    Boolean aBoolean;
+    private RewardedVideoAd mAd;
+    long secondsout, secondsin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_online);
 
-        ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
-        tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
-        tvTien = (TextView) findViewById(R.id.tvTien);
-        layout = (LinearLayout) findViewById(R.id.frameLayout7);
-        layout1 = (LinearLayout) findViewById(R.id.frameLayout4);
-        layout2 = (LinearLayout) findViewById(R.id.frameLayout5);
-        layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
-        ivImage = (ImageView) findViewById(R.id.ivImage);
-        btHint = (Button) findViewById(R.id.btnhint);
-        btLuotChoi = (Button) findViewById(R.id.btLuotChoi);
-        tvSai = (TextView) findViewById(R.id.tvSai);
-        tvSai.setVisibility(View.INVISIBLE);
+        mAd = MobileAds.getRewardedVideoAdInstance(this);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
-        getmDatabase = FirebaseDatabase.getInstance().getReference().child("json");
-        storage = FirebaseStorage.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mUser = mAuth.getCurrentUser();
+        anhXa();
+        getData();
         getUser(mUser);
-        new ImageLoadTask(image, ivAvatar).execute();
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    dsKey.add(snapshot.getKey());
                     mDatabase.child(snapshot.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot2) {
-                            String key = dataSnapshot2.getKey().toString();
+
                             User user = dataSnapshot2.getValue(User.class);
-                            dsKey.add(key);
                             dsUser.add(user);
                             Log.e("CountdsUser", dsUser.size() + "");
                             if (dsUser.size() == dataSnapshot.getChildrenCount()) {
                                 for (int i = 0; i < dsUser.size(); i++) {
                                     if (dsUser.get(i).id.toString().equals(id)) {
+
                                         tvCauHoi.setText(String.valueOf(dsUser.get(i).score));
                                         int cauhoi = dsUser.get(i).score - 1;
                                         tvTien.setText(String.valueOf(dsUser.get(i).money));
+                                        setBtHint(i);
+                                        mAd.setRewardedVideoAdListener(new RewardedVideoAdListener() {
+                                            @Override
+                                            public void onRewardedVideoAdLoaded() {
+                                                if (mAd.isLoaded()) {
+                                                    mAd.show();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onRewardedVideoAdOpened() {
+                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onRewardedVideoStarted() {
+                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onRewardedVideoAdClosed() {
+                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdClosed", Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onRewarded(RewardItem rewardItem) {
+                                                // Toast.makeText(PlayOnlineActivity.this, "onRewarded! currency: " + rewardItem.getType() + "  amount: " +
+                                                //        rewardItem.getAmount(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(PlayOnlineActivity.this, "Bạn được tặng 10$", Toast.LENGTH_SHORT).show();
+
+//
+                                                // Reward the user.
+                                            }
+
+                                            @Override
+                                            public void onRewardedVideoAdLeftApplication() {
+                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdLeftApplication",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                            @Override
+                                            public void onRewardedVideoAdFailedToLoad(int i) {
+                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdFailedToLoad", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        xemQuangCaoTangTien(i);
                                         getmDatabase.child(String.valueOf(cauhoi)).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                 CauHoi cauHoi = dataSnapshot.getValue(CauHoi.class);
                                                 dsCauHoi.add(cauHoi);
-                                                Log.d("countDSCH", dsCauHoi.get(0).fullAnswer + "");
                                                 hienthi();
+
                                             }
 
                                             @Override
@@ -134,7 +181,38 @@ public class PlayOnlineActivity extends AppCompatActivity {
 
             }
         });
+        setBtInvite();
 
+
+    }
+
+    private void loadRewardedVideoAd() {
+        mAd.loadAd("ca-app-pub-9912852468951137/6325122005", new AdRequest.Builder().addTestDevice("897C0897019A2718E2407F03124C44D7").build());
+    }
+
+    private void getData() {
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
+        getmDatabase = FirebaseDatabase.getInstance().getReference().child("json");
+        storage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mUser = mAuth.getCurrentUser();
+    }
+
+    private void anhXa() {
+        ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
+        tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
+        tvTien = (TextView) findViewById(R.id.tvTien);
+        layout = (LinearLayout) findViewById(R.id.frameLayout7);
+        layout1 = (LinearLayout) findViewById(R.id.frameLayout4);
+        layout2 = (LinearLayout) findViewById(R.id.frameLayout5);
+        layout3 = (LinearLayout) findViewById(R.id.frameLayout6);
+        ivImage = (ImageView) findViewById(R.id.ivImage);
+        ivTien = (ImageView) findViewById(R.id.ivTien);
+        btHint = (Button) findViewById(R.id.btnhint);
+        btLuotChoi = (Button) findViewById(R.id.btLuotChoi);
+        tvSai = (TextView) findViewById(R.id.tvSai);
+        tvSai.setVisibility(View.INVISIBLE);
+        btInvite = (Button) findViewById(R.id.btInvite);
     }
 
     private void getUser(FirebaseUser user) {
@@ -143,6 +221,8 @@ public class PlayOnlineActivity extends AppCompatActivity {
             image = mAuth.getCurrentUser().getPhotoUrl().toString();
             id = Profile.getCurrentProfile().getId();
             Log.d("idprofile", id);
+            new ImageLoadTask(image, ivAvatar).execute();
+
 
         }
     }
@@ -173,207 +253,304 @@ public class PlayOnlineActivity extends AppCompatActivity {
 
             for (int i = 0; i < 7; i++) {
 
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-
-                layout3.addView(rowview);
-                layout3.setBackgroundColor(getResources().getColor(android.R.color.white));
+                setLayout3(inf);
 
             }
             for (int i = 7; i < getShortAnswer.length; i++) {
 
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-                layout.addView(rowview);
-
-                layout.setBackgroundColor(getResources().getColor(android.R.color.black));
+                setLayout(inf);
 
             }
         } else {
             for (int i = 0; i < getShortAnswer.length; i++) {
-
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-                layout3.addView(rowview);
+                setLayout3(inf);
 
             }
         }
         final String s = shortAnswer.replace(",", "");
         ////chỗ này show ra các để chọn
         for (int i = 0; i < 8; i++) {
-            View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
-            imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
-            textview1.setTag(imageView1);
-            textview1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (index < dsODapAn.size()) {
-
-                        String chuoi = ((TextView) v).getText().toString();
-                        chuoikq.append(chuoi);
-                        dsODapAn.get(index).setText(chuoi);
-                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                        index++;
-                        ((TextView) v).setText("");
-                        v.setClickable(false);
-                        ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-                    }
-                    if (index == dsODapAn.size()) {
-                        if (s.equals(chuoikq.toString())) {
-                            tvSai.setText("Bạn đã chọn đáp án đúng");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
-                            }
-
-                            Intent intent = new Intent(PlayOnlineActivity.this, ResultPlayOnlineActivity.class);
-                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-
-                            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-                            intent.putExtra("tien",tvTien.getText().toString());
-                            startActivity(intent);
-                            finish();
-                        } else {
-
-                            //luotchoi--;
-                            //btLuotChoi.setText(String.valueOf(luotchoi));
-                            tvSai.setText("Bạn đã chọn đáp án sai");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-                            }
-                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    dsIVDapAn.clear();
-                                    dsODapAn.clear();
-                                    dsItem.clear();
-                                    layout3.removeAllViews();
-                                    layout2.removeAllViews();
-                                    layout.removeAllViews();
-                                    layout1.removeAllViews();
-                                    index = 0;
-
-                                    tvSai.setVisibility(View.INVISIBLE);
-                                    hienthi();
-                                }
-                            };
-                            timer.start();
-                        }
-                    }
-                }
-            });
-            textview1.setText(dsItem.get(i));
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            param.gravity = Gravity.CENTER;
-            rowview.setLayoutParams(param);
-            layout1.addView(rowview);
+            setLayout1(inf, s, i);
         }
 
         for (int j = 8; j < 16; j++) {
-            View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
-            imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
-            textview2.setTag(imageView2);
-            textview2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (index < dsODapAn.size()) {
-                        String chuoi = ((TextView) v).getText().toString();
-                        chuoikq.append(chuoi);
-                        dsODapAn.get(index).setText(chuoi);
-                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                        index++;
-                        ((TextView) v).setText("");
-                        v.setClickable(false);
-                        ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+            setLayout2(inf, s, j);
+        }
+    }
 
-                    }
-                    if (index == dsODapAn.size()) {
-                        if (s.equals(chuoikq.toString())) {
-                            tvSai.setText("Bạn đã chọn đáp án đúng");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
-                            }
-                            Intent intent = new Intent(PlayOnlineActivity.this, ResultPlayOnlineActivity.class);
-                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-                            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-                            intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-                            intent.putExtra("tien",tvTien.getText().toString());
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-                            v.setClickable(false);
-                            // luotchoi--;
-                            // btLuotChoi.setText(String.valueOf(luotchoi));
-                            tvSai.setText("Bạn đã chọn đáp án sai");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-                            }
-
-                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    dsIVDapAn.clear();
-                                    dsODapAn.clear();
-                                    dsItem.clear();
-                                    layout3.removeAllViews();
-                                    layout2.removeAllViews();
-                                    layout.removeAllViews();
-                                    layout1.removeAllViews();
-                                    index = 0;
-                                    tvSai.setVisibility(View.INVISIBLE);
-                                    hienthi();
-                                }
-                            };
-                            timer.start();
-                        }
-                    }
+    private void setLayout2(LayoutInflater inf, final String s, int j) {
+        View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+        textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        textview2.setTag(imageView2);
+        textview2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index < dsODapAn.size()) {
+                    String chuoi = ((TextView) v).getText().toString();
+                    chuoikq.append(chuoi);
+                    dsODapAn.get(index).setText(chuoi);
+                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                    index++;
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
 
                 }
-            });
-            textview2.setText(dsItem.get(j));
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            param.gravity = Gravity.CENTER;
-            rowview.setLayoutParams(param);
-            layout2.addView(rowview);
+                if (index == dsODapAn.size()) {
+                    soSanhKetQua(s, v);
+                }
+
+            }
+        });
+        textview2.setText(dsItem.get(j));
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout2.addView(rowview);
+    }
+
+    private void setLayout1(LayoutInflater inf, final String s, int i) {
+        View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+        textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        textview1.setTag(imageView1);
+        textview1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (index < dsODapAn.size()) {
+
+                    String chuoi = ((TextView) v).getText().toString();
+                    chuoikq.append(chuoi);
+                    dsODapAn.get(index).setText(chuoi);
+                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                    index++;
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+                }
+                if (index == dsODapAn.size()) {
+                    soSanhKetQua(s, v);
+                }
+            }
+        });
+        textview1.setText(dsItem.get(i));
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout1.addView(rowview);
+    }
+
+    private void setLayout3(LayoutInflater inf) {
+
+        View rowview = inf.inflate(R.layout.layout_item_choose, null);
+        TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        dsODapAn.add(textview);
+        dsIVDapAn.add(imageview);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout3.addView(rowview);
+    }
+
+    public void setLayout(LayoutInflater inf) {
+        View rowview = inf.inflate(R.layout.layout_item_choose, null);
+        TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        dsODapAn.add(textview);
+        dsIVDapAn.add(imageview);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout.addView(rowview);
+
+    }
+
+
+    private void soSanhKetQua(String s, View v) {
+        if (s.equals(chuoikq.toString())) {
+            boolean x = true;
+            SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = ghi.edit();
+            editor.putBoolean("boolean", x);
+            editor.commit();
+            tvSai.setText("Bạn đã chọn đáp án đúng");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
+            }
+            Intent intent = new Intent(PlayOnlineActivity.this, ResultPlayOnlineActivity.class);
+            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
+            intent.putExtra("cauhoi", tvCauHoi.getText().toString());
+            intent.putExtra("tien", tvTien.getText().toString());
+            startActivity(intent);
+            finish();
+
+        } else {
+            v.setClickable(false);
+            // luotchoi--;
+            // btLuotChoi.setText(String.valueOf(luotchoi));
+            tvSai.setText("Bạn đã chọn đáp án sai");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
+            }
+
+            CountDownTimer timer = new CountDownTimer(2000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+                    dsIVDapAn.clear();
+                    dsODapAn.clear();
+                    dsItem.clear();
+                    layout3.removeAllViews();
+                    layout2.removeAllViews();
+                    layout.removeAllViews();
+                    layout1.removeAllViews();
+                    index = 0;
+                    tvSai.setVisibility(View.INVISIBLE);
+                    hienthi();
+                }
+            };
+            timer.start();
         }
+    }
+
+    public void setBtInvite() {
+        btInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialogInvite(PlayOnlineActivity.this);
+            }
+        });
+    }
+
+    public static void openDialogInvite(final Activity activity) {
+
+        String appLinkUrl;
+
+        appLinkUrl = "https://www.facebook.com/yanyan0110";
+        // previewImageUrl = "https://www.example.com/my_invite_image.jpg";
+
+        if (AppInviteDialog.canShow()) {
+            AppInviteContent content = new AppInviteContent.Builder()
+                    .setApplinkUrl(appLinkUrl)
+                    .build();
+
+            AppInviteDialog appInviteDialog = new AppInviteDialog(activity);
+            CallbackManager sCallbackManager = CallbackManager.Factory.create();
+            appInviteDialog.registerCallback(sCallbackManager, new FacebookCallback<AppInviteDialog.Result>() {
+                @Override
+                public void onSuccess(AppInviteDialog.Result result) {
+
+                }
+
+                @Override
+                public void onCancel() {
+                }
+
+                @Override
+                public void onError(FacebookException e) {
+                }
+            });
+
+            appInviteDialog.show(content);
+        }
+    }
+
+
+    public void setBtHint(final int i) {
+
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        aBoolean = lay.getBoolean("boolean", true);
+        Log.d("getBoolean", String.valueOf(aBoolean));
+
+
+        btHint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (dsUser.get(i).money < 20) {
+                    Toast.makeText(PlayOnlineActivity.this, "Bạn không đủ tiền để xem gợi ý", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (aBoolean == true) {
+                        int money = dsUser.get(i).money - 20;
+                        mDatabase.child(dsKey.get(i)).child("money").setValue(money);
+                        tvTien.setText(String.valueOf(money));
+                        aBoolean = false;
+                    }
+                    boolean x = aBoolean;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putBoolean("boolean", x);
+                    editor.commit();
+                    CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+                    dialogGoiY.setCancelable(false);
+                    dialogGoiY.show(getFragmentManager(), "cde");
+                    dialogGoiY.setGoiy(goiy);
+                    dialogGoiY.setTieude("Thông báo");
+                    Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        });
+
+    }
+
+    public void xemQuangCaoTangTien(final int i) {
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        secondsout = lay.getLong("seconds", 0);
+        secondsin = System.currentTimeMillis() / 1000;
+        Log.d("secondsout",secondsout+"");
+        Log.d("secondsin",secondsin+"");
+        Log.d("secondsoutin",(secondsin-secondsout)+"");
+        if ((secondsin - secondsout) >= 3600) {
+            ivTien.setImageResource(R.drawable.coinicon);
+            ivTien.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long seconds = System.currentTimeMillis() / 1000;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putLong("seconds", seconds);
+                    editor.apply();
+                    Log.d("seconds", String.valueOf(seconds));
+                    int money = dsUser.get(i).money + 10;
+                    mDatabase.child(dsKey.get(i)).child("money").setValue(money);
+                    Toast.makeText(PlayOnlineActivity.this, "Đang load quảng cáo...", Toast.LENGTH_SHORT).show();
+                    loadRewardedVideoAd();
+                }
+            });
+        }
+        else{
+            ivTien.setImageResource(R.drawable.coinicongray);
+            ivTien.setOnClickListener(null);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mAd.destroy(this);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        mAd.resume(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        mAd.pause(this);
+        super.onPause();
     }
 }

@@ -26,7 +26,7 @@ public class PlayActivity extends AppCompatActivity {
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2;
 
-    Button btHint, btLuotChoi;
+    Button btHint, btLuotChoi,btInvite;
     DatabaseHelper helper;
     int index = 0;
     int vitri = 0;
@@ -66,6 +66,8 @@ public class PlayActivity extends AppCompatActivity {
         ivImage = (ImageView) findViewById(R.id.ivImage);
         btHint = (Button) findViewById(R.id.btnhint);
         btLuotChoi = (Button) findViewById(R.id.btLuotChoi);
+        btInvite = (Button) findViewById(R.id.btInvite);
+
         tvSai = (TextView) findViewById(R.id.tvSai);
         tvSai.setVisibility(View.INVISIBLE);
         tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
@@ -75,17 +77,14 @@ public class PlayActivity extends AppCompatActivity {
         btHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialogHint dialogHint = new CustomDialogHint();
-                dialogHint.setCancelable(false);
-                dialogHint.show(getFragmentManager(), "abc");
-                dialogHint.setText(goiy);
+                CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+                dialogGoiY.setCancelable(false);
+                dialogGoiY.show(getFragmentManager(), "abc");
+                dialogGoiY.setGoiy("Vui lòng đăng nhập để sử dụng chức năng này");
+                dialogGoiY.setTieude("Thông báo");
             }
         });
-        if(luotchoi < 5)
-        {
-            //setLuotchoi();
-        }
-
+        setBtInvite();
     }
 
     public void hienthi() {
@@ -352,5 +351,19 @@ public class PlayActivity extends AppCompatActivity {
             }
         };
     }
+    public void setBtInvite()
+    {
+        btInvite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+                dialogGoiY.setCancelable(false);
+                dialogGoiY.show(getFragmentManager(), "abc");
+                dialogGoiY.setGoiy("Vui lòng đăng nhập để sử dụng chức năng này");
+                dialogGoiY.setTieude("Thông báo");
+            }
+        });
+    }
+
 
 }

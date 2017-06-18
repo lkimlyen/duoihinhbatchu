@@ -15,6 +15,7 @@ import android.view.WindowManager;
 
 public class CustomDialogHint extends DialogFragment {
     String text;
+
     public void setText(String text) {
         this.text = text;
     }
@@ -40,11 +41,7 @@ public class CustomDialogHint extends DialogFragment {
         dialog.findViewById(R.id.btGoiY).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
-                dialogGoiY.setCancelable(false);
-                dialogGoiY.show(getFragmentManager(), "cde");
-                dialogGoiY.setGoiy(text);
-                dismiss();
+
             }
         });
         return dialog;
