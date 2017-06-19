@@ -2,6 +2,7 @@ package com.example.yenyen.duoihinhbatchudemo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,6 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,7 +36,6 @@ public class PlayActivity extends BaseActivity {
 
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2, ivAvatar, ivAvatarKhung, ivDolaIcon, ivPictureBorder;
-
     Button btHint, btLuotChoi, btInvite;
     DatabaseHelper helper;
     int index = 0;
@@ -117,6 +118,7 @@ public class PlayActivity extends BaseActivity {
         ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
         ivDolaIcon = (ImageView) findViewById(R.id.ivDolaIcon);
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
+
     }
 
     public void hienthi() {
@@ -145,126 +147,261 @@ public class PlayActivity extends BaseActivity {
         }
         Collections.shuffle(dsItem);
         //chỗ này show ra các item ở trên
+        final String s = shortAnswer.replace(",", "");
         if (getShortAnswer.length > 7) {
 
             for (int i = 0; i < 7; i++) {
 
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                imageview.setImageResource(R.drawable.tileempty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-                layout3.addView(rowview);
+                setLayout3(inf, s);
 
             }
             for (int i = 7; i < getShortAnswer.length; i++) {
 
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                imageview.setImageResource(R.drawable.tileempty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-                layout.addView(rowview);
+                setLayout(inf, s);
 
             }
         } else {
             for (int i = 0; i < getShortAnswer.length; i++) {
-
-                View rowview = inf.inflate(R.layout.layout_item_choose, null);
-                TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
-                ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
-                imageview.setImageResource(R.drawable.tileempty);
-                dsODapAn.add(textview);
-                dsIVDapAn.add(imageview);
-                Resources r = getResources();
-                float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
-                param.gravity = Gravity.CENTER;
-                rowview.setLayoutParams(param);
-                layout3.addView(rowview);
+                setLayout3(inf, s);
 
             }
         }
-        final String s = shortAnswer.replace(",", "");
         ////chỗ này show ra các để chọn
         for (int i = 0; i < 8; i++) {
-            View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
-            imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
-            imageView1.setImageResource(R.drawable.tilehover);
-            textview1.setTag(imageView1);
-            dsOChon.add(textview1);
-            textview1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (index < dsODapAn.size()) {
-                        pop.start();
-                        String chuoi = ((TextView) v).getText().toString();
-                        chuoikq.append(chuoi);
-                        dsODapAn.get(index).setText(chuoi);
-                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                        index++;
-                        ((TextView) v).setText("");
-                        v.setClickable(false);
-                        ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-                    }
-                    if (index == dsODapAn.size()) {
-                        soSanhKetQua(s);
-                    }
-                }
-            });
-            textview1.setText(dsItem.get(i));
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            param.gravity = Gravity.CENTER;
-            rowview.setLayoutParams(param);
-            layout1.addView(rowview);
+            setLayout1(inf, s, i);
         }
 
         for (int j = 8; j < 16; j++) {
-            final View rowview = inf.inflate(R.layout.layout_item_choose1, null);
-            textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
-            imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
-            imageView2.setImageResource(R.drawable.tilehover);
-            textview2.setTag(imageView2);
-            dsOChon.add(textview2);
-            textview2.setOnClickListener(new View.OnClickListener() {
+            setLayout2(inf, s, j);
+        }
+    }
+
+    private void setLayout2(LayoutInflater inf, final String s, int j) {
+        View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+        textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        dsOChon.add(textview2);
+        imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        imageView2.setImageResource(R.drawable.tilehover);
+        textview2.setTag(imageView2);
+        textview2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewOTraLoi(v, s);
+            }
+        });
+        textview2.setText(dsItem.get(j));
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout2.addView(rowview);
+    }
+
+    public void clickTextViewOTraLoi(View v, final String s) {
+        String chuoi = ((TextView) v).getText().toString();
+        int dem = 0;
+        for (int i = 0; i < index; i++) {
+            if (dsODapAn.get(i).getText().toString().equals("")) {
+                dsODapAn.get(i).setText(chuoi);
+                dsODapAn.get(i).setTag(v);
+                dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
+                ((TextView) v).setText("");
+                v.setClickable(false);
+                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+                dem++;
+                break;
+            }
+
+        }
+        if (dem == 0) {
+            if (index < dsODapAn.size()) {
+
+                pop.setVolume(100, 100);
+                pop.start();
+                dsODapAn.get(index).setText(chuoi);
+                dsODapAn.get(index).setTag(v);
+                dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                index++;
+                ((TextView) v).setText("");
+                v.setClickable(false);
+                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+
+            }
+            if (index == dsODapAn.size()) {
+                soSanhKetQua(s);
+            }
+        }
+
+
+    }
+
+    private void setLayout1(LayoutInflater inf, final String s, int i) {
+        View rowview = inf.inflate(R.layout.layout_item_choose1, null);
+        textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        dsOChon.add(textview1);
+        imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
+        imageView1.setImageResource(R.drawable.tilehover);
+        textview1.setTag(imageView1);
+        textview1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewOTraLoi(v, s);
+            }
+        });
+        textview1.setText(dsItem.get(i));
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout1.addView(rowview);
+    }
+
+    private void setLayout3(LayoutInflater inf, final String s) {
+
+        View rowview = inf.inflate(R.layout.layout_item_choose, null);
+        TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewDaChon(v, s);
+            }
+        });
+
+        ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        imageview.setImageResource(R.drawable.tileempty);
+        imageview.setTag(textview);
+        dsODapAn.add(textview);
+        dsIVDapAn.add(imageview);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout3.addView(rowview);
+    }
+
+    private void clickTextViewDaChon(View v, final String s) {
+        if (!((TextView) v).getText().toString().equals("")) {
+            ((ImageView) ((TextView) v.getTag()).getTag()).setVisibility(View.VISIBLE);
+            ((TextView) v.getTag()).setText(((TextView) v).getText().toString());
+            ((TextView) v.getTag()).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (index < dsODapAn.size()) {
-                        pop.start();
-                        String chuoi = ((TextView) v).getText().toString();
-                        chuoikq.append(chuoi);
-                        dsODapAn.get(index).setText(chuoi);
-                        dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                        index++;
-                        ((TextView) v).setText("");
-                        v.setClickable(false);
-
-                        ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-
-                    }
-                    if (index == dsODapAn.size()) {
-                    soSanhKetQua(s);
-                    }
+                    clickTextViewOTraLoi(v, s);
                 }
             });
-            textview2.setText(dsItem.get(j));
-            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(50, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            param.gravity = Gravity.CENTER;
-            rowview.setLayoutParams(param);
-            layout2.addView(rowview);
+            ((ImageView) ((TextView) v.getTag()).getTag()).setImageResource(R.drawable.tilehover);
+            for (int i = 0; i < dsIVDapAn.size(); i++) {
+                if (dsIVDapAn.get(i).getTag().equals(v)) {
+                    dsIVDapAn.get(i).setImageResource(R.drawable.tileempty);
+                    dsODapAn.get(i).setText("");
+                    break;
+                }
+            }
+            v.setTag(null);
+            ((TextView) v).setText("");
+        }
+
+    }
+
+    public void setLayout(LayoutInflater inf, final String s) {
+        View rowview = inf.inflate(R.layout.layout_item_choose, null);
+        TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewDaChon(v, s);
+            }
+        });
+        ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
+        imageview.setImageResource(R.drawable.tileempty);
+        imageview.setTag(textview);
+        dsODapAn.add(textview);
+        dsIVDapAn.add(imageview);
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40, r.getDisplayMetrics());
+        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams((int) px, LinearLayout.LayoutParams.WRAP_CONTENT);
+        param.gravity = Gravity.CENTER;
+        rowview.setLayoutParams(param);
+        layout.addView(rowview);
+
+    }
+
+
+    private void soSanhKetQua(String s) {
+        for (int i = 0; i < dsODapAn.size(); i++) {
+            chuoikq.append(dsODapAn.get(i).getText().toString());
+        }
+        Log.d("dapan", chuoikq.toString());
+        if (s.equals(chuoikq.toString())) {
+            mtrue.setVolume(100, 100);
+            mtrue.start();
+
+            boolean x = true;
+            SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = ghi.edit();
+            editor.putBoolean("boolean", x);
+            editor.commit();
+            animate(layout);
+            animate(layout3);
+            animateTV(tvSai);
+            tvSai.setText("Bạn đã chọn đáp án đúng");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
+            }
+            CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
+                    intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+                    intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
+                    intent.putExtra("cauhoi", tvCauHoi.getText().toString());
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            countDownTimer.start();
+
+        } else {
+
+            fail.setVolume(100, 100);
+            fail.start();
+            animate(layout);
+            animate(layout3);
+            for (int i = 0; i < dsOChon.size(); i++) {
+                dsOChon.get(i).setClickable(false);
+            }
+            tvSai.setText("Bạn đã chọn đáp án sai");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
+            }
+
+            CountDownTimer timer = new CountDownTimer(2000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                }
+
+                @Override
+                public void onFinish() {
+                    chuoikq.setLength(0);
+                    dsIVDapAn.clear();
+                    dsODapAn.clear();
+                    dsItem.clear();
+                    layout3.removeAllViews();
+                    layout2.removeAllViews();
+                    layout.removeAllViews();
+                    layout1.removeAllViews();
+                    index = 0;
+                    tvSai.setVisibility(View.INVISIBLE);
+                    hienthi();
+                }
+            };
+            timer.start();
         }
     }
 
@@ -313,8 +450,9 @@ public class PlayActivity extends BaseActivity {
         player.setVolume(100, 100);
         player.start();
     }
-    public void animate(LinearLayout ll){
-        Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.scale);
+
+    public void animate(LinearLayout ll) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
         animation.setDuration(500);
         ll.setAnimation(animation);
         ll.animate();
@@ -322,8 +460,8 @@ public class PlayActivity extends BaseActivity {
 
     }
 
-    public void animateTV(TextView tv){
-        Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.scale);
+    public void animateTV(TextView tv) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
         animation.setDuration(500);
         tv.setAnimation(animation);
         tv.animate();
@@ -350,75 +488,6 @@ public class PlayActivity extends BaseActivity {
         super.onResume();
         player.start();
     }
-    private void soSanhKetQua(String s){
-        if (s.equals(chuoikq.toString())) {
-            animate(layout3);
-            animate(layout);
-            mtrue.start();
 
-            animateTV(tvSai);
-            tvSai.setText("Bạn đã chọn đáp án đúng");
-            tvSai.setVisibility(View.VISIBLE);
-            for (int j = 0; j < dsODapAn.size(); j++) {
-                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
-            }
-            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
-            helper.updateStatus(ch);
-            CountDownTimer countDownTimer= new CountDownTimer(3000,1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
-                    intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-
-                    intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-                    intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-                    startActivity(intent);
-                    finish();
-                }
-            };
-            countDownTimer.start();
-        } else {
-            fail.start();
-            for (int i = 0; i < dsOChon.size(); i++) {
-                dsOChon.get(i).setClickable(false);
-            }
-            animate(layout3);
-            animate(layout);
-            luotchoi--;
-            btLuotChoi.setText(String.valueOf(luotchoi));
-            tvSai.setText("Bạn đã chọn đáp án sai");
-            tvSai.setVisibility(View.VISIBLE);
-            for (int j = 0; j < dsODapAn.size(); j++) {
-                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-            }
-            CountDownTimer timer = new CountDownTimer(3000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    dsIVDapAn.clear();
-                    dsODapAn.clear();
-                    dsItem.clear();
-                    layout3.removeAllViews();
-                    layout2.removeAllViews();
-                    layout.removeAllViews();
-                    layout1.removeAllViews();
-                    index = 0;
-
-                    tvSai.setVisibility(View.INVISIBLE);
-                    hienthi();
-                }
-            };
-            timer.start();
-        }
-    }
 
 }

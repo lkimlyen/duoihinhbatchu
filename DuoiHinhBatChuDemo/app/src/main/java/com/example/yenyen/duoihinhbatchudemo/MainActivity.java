@@ -147,6 +147,7 @@ public class MainActivity extends BaseActivity {
         animation.setDuration(500);
         view.setAnimation(animation);
         view.animate();
+        animation.setRepeatMode(Animation.REVERSE);
         animation.setRepeatCount(Animation.INFINITE);
         animation.start();
 

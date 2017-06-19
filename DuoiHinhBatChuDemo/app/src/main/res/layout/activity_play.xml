@@ -7,6 +7,9 @@
     android:background="@drawable/gameplaybackground"
     tools:context="com.example.yenyen.duoihinhbatchudemo.ResultActivity">
 
+
+
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
@@ -42,10 +45,9 @@
                 android:layout_marginStart="60dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="#ffffff"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                />
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btLuotChoi"
@@ -59,9 +61,8 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/buttontim"
                 android:text="5"
-                android:textColor="#ffffff"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                />
+                android:textColor="#ffffff" />
 
         </FrameLayout>
 
@@ -139,25 +140,25 @@
         android:id="@+id/frameLayout8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@+id/frameLayout2"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvSai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#ffffff"
             android:textAppearance="@style/TextAppearance.FontPath"
-            />
+            android:textColor="#ffffff" />
+
         <LinearLayout
             android:id="@+id/frameLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-
 
 
         </LinearLayout>

@@ -66,7 +66,7 @@ public class PlayOnlineActivity extends BaseActivity {
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
     ArrayList<TextView> dsOChon = new ArrayList<>();
     StringBuilder chuoikq;
-    TextView textview1, textview2, tvSai;
+    TextView textview1, textview2, tvSai, tvTruDiem;
     int vitri = 0;
     int index = 0;
     FirebaseStorage storage;
@@ -221,6 +221,8 @@ public class PlayOnlineActivity extends BaseActivity {
         btInvite = (Button) findViewById(R.id.btInvite);
         ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
+        tvTruDiem = (TextView) findViewById(R.id.tvTruDiem);
+        tvTruDiem.setVisibility(View.INVISIBLE);
     }
 
     private void setImageView() {
@@ -262,25 +264,25 @@ public class PlayOnlineActivity extends BaseActivity {
             dsItem.add(kyTu[rd]);
         }
         Collections.shuffle(dsItem);
+        final String s = shortAnswer.replace(",", "");
         if (getShortAnswer.length > 7) {
 
             for (int i = 0; i < 7; i++) {
 
-                setLayout3(inf);
+                setLayout3(inf, s);
 
             }
             for (int i = 7; i < getShortAnswer.length; i++) {
 
-                setLayout(inf);
+                setLayout(inf, s);
 
             }
         } else {
             for (int i = 0; i < getShortAnswer.length; i++) {
-                setLayout3(inf);
+                setLayout3(inf, s);
 
             }
         }
-        final String s = shortAnswer.replace(",", "");
         ////chỗ này show ra các để chọn
         for (int i = 0; i < 8; i++) {
             setLayout1(inf, s, i);
@@ -301,32 +303,7 @@ public class PlayOnlineActivity extends BaseActivity {
         textview2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (index < dsODapAn.size()) {
-                    if (mBool == true) {
-
-                        pop.setVolume(100, 100);
-                        pop.start();
-
-                    } else
-
-                    {
-                        pop.start();
-                        pop.pause();
-                    }
-                    String chuoi = ((TextView) v).getText().toString();
-                    chuoikq.append(chuoi);
-                    dsODapAn.get(index).setText(chuoi);
-                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                    index++;
-                    ((TextView) v).setText("");
-                    v.setClickable(false);
-                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-
-                }
-                if (index == dsODapAn.size()) {
-                    soSanhKetQua(s);
-                }
-
+                clickTextViewOTraLoi(v, s);
             }
         });
         textview2.setText(dsItem.get(j));
@@ -334,6 +311,52 @@ public class PlayOnlineActivity extends BaseActivity {
         param.gravity = Gravity.CENTER;
         rowview.setLayoutParams(param);
         layout2.addView(rowview);
+    }
+
+    public void clickTextViewOTraLoi(View v, final String s) {
+        String chuoi = ((TextView) v).getText().toString();
+        int dem = 0;
+        for (int i = 0; i < index; i++) {
+            if (dsODapAn.get(i).getText().toString().equals("")) {
+                dsODapAn.get(i).setText(chuoi);
+                dsODapAn.get(i).setTag(v);
+                dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
+                ((TextView) v).setText("");
+                v.setClickable(false);
+                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+                dem++;
+                break;
+            }
+
+        }
+        if (dem == 0) {
+            if (index < dsODapAn.size()) {
+                if (mBool == true) {
+
+                    pop.setVolume(100, 100);
+                    pop.start();
+
+                } else
+
+                {
+                    pop.start();
+                    pop.pause();
+                }
+                dsODapAn.get(index).setText(chuoi);
+                dsODapAn.get(index).setTag(v);
+                dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                index++;
+                ((TextView) v).setText("");
+                v.setClickable(false);
+                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+
+            }
+            if (index == dsODapAn.size()) {
+                soSanhKetQua(s);
+            }
+        }
+
+
     }
 
     private void setLayout1(LayoutInflater inf, final String s, int i) {
@@ -346,31 +369,7 @@ public class PlayOnlineActivity extends BaseActivity {
         textview1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (index < dsODapAn.size()) {
-
-                    if (mBool == true) {
-
-                        pop.setVolume(100, 100);
-                        pop.start();
-
-                    } else
-
-                    {
-                        pop.start();
-                        pop.pause();
-                    }
-                    String chuoi = ((TextView) v).getText().toString();
-                    chuoikq.append(chuoi);
-                    dsODapAn.get(index).setText(chuoi);
-                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                    index++;
-                    ((TextView) v).setText("");
-                    v.setClickable(false);
-                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-                }
-                if (index == dsODapAn.size()) {
-                    soSanhKetQua(s);
-                }
+                clickTextViewOTraLoi(v, s);
             }
         });
         textview1.setText(dsItem.get(i));
@@ -380,12 +379,20 @@ public class PlayOnlineActivity extends BaseActivity {
         layout1.addView(rowview);
     }
 
-    private void setLayout3(LayoutInflater inf) {
+    private void setLayout3(LayoutInflater inf, final String s) {
 
         View rowview = inf.inflate(R.layout.layout_item_choose, null);
         TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewDaChon(v, s);
+            }
+        });
+
         ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
         imageview.setImageResource(R.drawable.tileempty);
+        imageview.setTag(textview);
         dsODapAn.add(textview);
         dsIVDapAn.add(imageview);
         Resources r = getResources();
@@ -396,11 +403,42 @@ public class PlayOnlineActivity extends BaseActivity {
         layout3.addView(rowview);
     }
 
-    public void setLayout(LayoutInflater inf) {
+    private void clickTextViewDaChon(View v, final String s) {
+        if (!((TextView) v).getText().toString().equals("")) {
+            ((ImageView) ((TextView) v.getTag()).getTag()).setVisibility(View.VISIBLE);
+            ((TextView) v.getTag()).setText(((TextView) v).getText().toString());
+            ((TextView) v.getTag()).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clickTextViewOTraLoi(v, s);
+                }
+            });
+            ((ImageView) ((TextView) v.getTag()).getTag()).setImageResource(R.drawable.tilehover);
+            for (int i = 0; i < dsIVDapAn.size(); i++) {
+                if (dsIVDapAn.get(i).getTag().equals(v)) {
+                    dsIVDapAn.get(i).setImageResource(R.drawable.tileempty);
+                    dsODapAn.get(i).setText("");
+                    break;
+                }
+            }
+            v.setTag(null);
+            ((TextView) v).setText("");
+        }
+
+    }
+
+    public void setLayout(LayoutInflater inf, final String s) {
         View rowview = inf.inflate(R.layout.layout_item_choose, null);
         TextView textview = (TextView) rowview.findViewById(R.id.tvKyTu2);
+        textview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickTextViewDaChon(v, s);
+            }
+        });
         ImageView imageview = (ImageView) rowview.findViewById(R.id.ivTileEmpty);
         imageview.setImageResource(R.drawable.tileempty);
+        imageview.setTag(textview);
         dsODapAn.add(textview);
         dsIVDapAn.add(imageview);
         Resources r = getResources();
@@ -414,6 +452,10 @@ public class PlayOnlineActivity extends BaseActivity {
 
 
     private void soSanhKetQua(String s) {
+        for (int i = 0; i < dsODapAn.size(); i++) {
+            chuoikq.append(dsODapAn.get(i).getText().toString());
+        }
+        Log.d("dapan", chuoikq.toString());
         if (s.equals(chuoikq.toString())) {
             if (mBool == true) {
                 mtrue.setVolume(100, 100);
@@ -438,7 +480,7 @@ public class PlayOnlineActivity extends BaseActivity {
             for (int j = 0; j < dsODapAn.size(); j++) {
                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
             }
-            CountDownTimer countDownTimer = new CountDownTimer(3000,1000) {
+            CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
 
@@ -450,7 +492,6 @@ public class PlayOnlineActivity extends BaseActivity {
                     intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
                     intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
                     intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-                    intent.putExtra("tien", tvTien.getText().toString());
                     intent.putExtra("statusmusic", mBool);
                     startActivity(intent);
                     finish();
@@ -487,6 +528,7 @@ public class PlayOnlineActivity extends BaseActivity {
 
                 @Override
                 public void onFinish() {
+                    chuoikq.setLength(0);
                     dsIVDapAn.clear();
                     dsODapAn.clear();
                     dsItem.clear();
@@ -512,12 +554,23 @@ public class PlayOnlineActivity extends BaseActivity {
 
     }
 
+    public void animateSlideup(View view) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.slideup);
+        animation.setDuration(3000);
+        view.setAnimation(animation);
+        view.animate();
+        animation.start();
+
+    }
+
+
     public void animateTV(TextView tv) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
         animation.setDuration(500);
         tv.setAnimation(animation);
         tv.animate();
         animation.setRepeatCount(3);
+        animation.setRepeatMode(Animation.REVERSE);
         animation.start();
 
     }
@@ -574,15 +627,30 @@ public class PlayOnlineActivity extends BaseActivity {
         btHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dsUser.get(i).money < 20) {
+                if (dsUser.get(i).money < 20 && aBoolean == true) {
                     Toast.makeText(PlayOnlineActivity.this, "Bạn không đủ tiền để xem gợi ý", Toast.LENGTH_SHORT).show();
                 } else {
                     if (aBoolean == true) {
-                        int money = dsUser.get(i).money - 20;
-                        mDatabase.child(dsKey.get(i)).child("money").setValue(money);
-                        tvTien.setText(String.valueOf(money));
+                        tvTruDiem.setVisibility(View.VISIBLE);
+                        animateSlideup(tvTruDiem);
+                        CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                int money = dsUser.get(i).money - 20;
+                                mDatabase.child(dsKey.get(i)).child("money").setValue(money);
+                                tvTien.setText(String.valueOf(money) + "$");
+
+                                Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
+                                tvTruDiem.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        countDownTimer.start();
                         aBoolean = false;
-                        Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
                     }
                     boolean x = aBoolean;
                     SharedPreferences ghi = getPreferences(MODE_PRIVATE);
