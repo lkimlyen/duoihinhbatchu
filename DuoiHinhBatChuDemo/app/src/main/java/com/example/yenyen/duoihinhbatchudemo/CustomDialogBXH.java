@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class CustomDialogBXH extends DialogFragment {
         ListView listView = (ListView) dialog.findViewById(R.id.dsUser);
         adapterBXH = new MyAdapterBXH(context, R.layout.layout_listview_item_bxh, users);
         listView.setAdapter(adapterBXH);
+        ImageView ivIconBXH= (ImageView) dialog.findViewById(R.id.ivIconBXH);
+        ivIconBXH.setImageResource(R.drawable.iconbangxephang);
         return dialog;
     }
 }

@@ -25,9 +25,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 public class ResultPlayOnlineActivity extends BaseActivity {
-    ImageView ivAvatar;
     TextView textView, tvCauHoi, tvTien;
-    ImageView imageView;
+    ImageView imageView, ivAvatar, ivAvatarKhung, ivCoinIcon, ivPictureBorder, ivDolaIcon;
+    ;
     Button btChoiTiep;
     String imageName;
     StorageReference storageRef;
@@ -38,6 +38,7 @@ public class ResultPlayOnlineActivity extends BaseActivity {
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dskey = new ArrayList<>();
     String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,23 +50,10 @@ public class ResultPlayOnlineActivity extends BaseActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
 
-        textView = (TextView) findViewById(R.id.tvKetQua);
-        tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
-        tvTien = (TextView) findViewById(R.id.tvTien);
-        imageView = (ImageView) findViewById(R.id.ivImageCH);
-        ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
-        btChoiTiep = (Button) findViewById(R.id.btChoiTiep);
+        anhxa();
 
-        new ImageLoadTask(image, ivAvatar).execute();
-        imageName = getIntent().getStringExtra("image");
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReferenceFromUrl("gs://duoihinhbatchu-9cee7.appspot.com/" + imageName);
-        Glide.with(ResultPlayOnlineActivity.this /* context */)
-                .using(new FirebaseImageLoader())
-                .load(storageRef)
-                .into(imageView);
-        //tvCauHoi.setText(getIntent().getStringExtra("cauhoi"));
-       // tvTien.setText(getIntent().getStringExtra("tien"));
+        setImageView();
+
         textView.setText(getIntent().getStringExtra("kq"));
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -81,7 +69,7 @@ public class ResultPlayOnlineActivity extends BaseActivity {
                             if (dsUser.size() == dataSnapshot.getChildrenCount()) {
                                 for (int i = 0; i < dsUser.size(); i++) {
                                     if (dsUser.get(i).id.toString().equals(userId)) {
-                                        tvTien.setText(String.valueOf(dsUser.get(i).money));
+                                        tvTien.setText(String.valueOf(dsUser.get(i).money) + "$");
                                         tvCauHoi.setText(String.valueOf(dsUser.get(i).score));
                                         int score = dsUser.get(i).score + 1;
                                         int money = dsUser.get(i).money + 5;
@@ -111,7 +99,10 @@ public class ResultPlayOnlineActivity extends BaseActivity {
             }
         });
 
+        setBtChoiTiep();
+    }
 
+    private void setBtChoiTiep() {
         btChoiTiep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,12 +112,41 @@ public class ResultPlayOnlineActivity extends BaseActivity {
                 editor.putBoolean("boolean", x);
                 editor.commit();
                 Intent intent = new Intent(ResultPlayOnlineActivity.this, PlayOnlineActivity.class);
+                boolean mBool = getIntent().getBooleanExtra("statusmusic", true);
+                intent.putExtra("statusmusic",mBool);
                 startActivity(intent);
                 finish();
 
             }
         });
+    }
 
+    private void setImageView() {
+        new ImageLoadTask(image, ivAvatar).execute();
+        imageName = getIntent().getStringExtra("image");
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReferenceFromUrl("gs://duoihinhbatchu-9cee7.appspot.com/" + imageName);
+        Glide.with(ResultPlayOnlineActivity.this /* context */)
+                .using(new FirebaseImageLoader())
+                .load(storageRef)
+                .into(imageView);
+        ivPictureBorder.setImageResource(R.drawable.pictureborder);
+        ivCoinIcon.setImageResource(R.drawable.coinicon);
+        ivAvatarKhung.setImageResource(R.drawable.avataricon);
+        ivDolaIcon.setImageResource(R.drawable.dolaicon);
+    }
+
+    private void anhxa() {
+        textView = (TextView) findViewById(R.id.tvKetQua);
+        tvCauHoi = (TextView) findViewById(R.id.tvCauHoi);
+        tvTien = (TextView) findViewById(R.id.tvTien);
+        imageView = (ImageView) findViewById(R.id.ivImageCH);
+        ivAvatar = (ImageView) findViewById(R.id.ivAvatar);
+        btChoiTiep = (Button) findViewById(R.id.btChoiTiep);
+        ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
+        ivDolaIcon = (ImageView) findViewById(R.id.ivDolaIcon);
+        ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
+        ivCoinIcon = (ImageView) findViewById(R.id.ivCoinIcon);
     }
 
 
@@ -136,4 +156,6 @@ public class ResultPlayOnlineActivity extends BaseActivity {
             userId = Profile.getCurrentProfile().getId();
         }
     }
+
+
 }

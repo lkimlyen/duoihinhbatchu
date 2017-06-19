@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -41,6 +42,8 @@ public class CustomDialogGoiY extends DialogFragment {
         textView.setText(goiy);
         TextView tvTitle = (TextView) dialog.findViewById(R.id.tvTitle);
         tvTitle.setText(tieude);
+        ImageView ivPoPup = (ImageView) dialog.findViewById(R.id.ivPoPup);
+        ivPoPup.setImageResource(R.drawable.popupl);
         return dialog;
     }
 }

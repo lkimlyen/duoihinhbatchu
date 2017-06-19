@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class PlayOnlineActivity extends BaseActivity {
-    ImageView ivAvatar,ivPictureBorder,ivAvatarKhung;
+    ImageView ivAvatar, ivPictureBorder, ivAvatarKhung;
     String image, id, goiy, imagename;
     TextView tvCauHoi, tvTien;
     DatabaseReference mDatabase, getmDatabase;
@@ -61,6 +62,7 @@ public class PlayOnlineActivity extends BaseActivity {
     ArrayList<String> dsItem = new ArrayList<>();
     ArrayList<TextView> dsODapAn = new ArrayList<>();
     ArrayList<ImageView> dsIVDapAn = new ArrayList<>();
+    ArrayList<TextView> dsOChon = new ArrayList<>();
     StringBuilder chuoikq;
     TextView textview1, textview2, tvSai;
     int vitri = 0;
@@ -70,6 +72,8 @@ public class PlayOnlineActivity extends BaseActivity {
     Boolean aBoolean;
     private RewardedVideoAd mAd;
     long secondsout, secondsin;
+    MediaPlayer player, pop, fail, mtrue;
+    Boolean mBool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +186,7 @@ public class PlayOnlineActivity extends BaseActivity {
             }
         });
         setBtInvite();
-
+        setMusic();
 
     }
 
@@ -216,11 +220,12 @@ public class PlayOnlineActivity extends BaseActivity {
         ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
     }
-private void setImageView()
-{
-    ivAvatarKhung.setImageResource(R.drawable.avataricon);
-    ivPictureBorder.setImageResource(R.drawable.pictureborder);
-}
+
+    private void setImageView() {
+        ivAvatarKhung.setImageResource(R.drawable.avataricon);
+        ivPictureBorder.setImageResource(R.drawable.pictureborder);
+    }
+
     private void getUser(FirebaseUser user) {
 
         if (user != null) {
@@ -287,6 +292,7 @@ private void setImageView()
     private void setLayout2(LayoutInflater inf, final String s, int j) {
         View rowview = inf.inflate(R.layout.layout_item_choose1, null);
         textview2 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        dsOChon.add(textview2);
         imageView2 = (ImageView) rowview.findViewById(R.id.ivTileHover);
         imageView2.setImageResource(R.drawable.tilehover);
         textview2.setTag(imageView2);
@@ -294,6 +300,17 @@ private void setImageView()
             @Override
             public void onClick(View v) {
                 if (index < dsODapAn.size()) {
+                    if (mBool == true) {
+
+                        pop.setVolume(100, 100);
+                        pop.start();
+
+                    } else
+
+                    {
+                        pop.start();
+                        pop.pause();
+                    }
                     String chuoi = ((TextView) v).getText().toString();
                     chuoikq.append(chuoi);
                     dsODapAn.get(index).setText(chuoi);
@@ -320,6 +337,7 @@ private void setImageView()
     private void setLayout1(LayoutInflater inf, final String s, int i) {
         View rowview = inf.inflate(R.layout.layout_item_choose1, null);
         textview1 = (TextView) rowview.findViewById(R.id.tvKyTu);
+        dsOChon.add(textview1);
         imageView1 = (ImageView) rowview.findViewById(R.id.ivTileHover);
         imageView1.setImageResource(R.drawable.tilehover);
         textview1.setTag(imageView1);
@@ -328,6 +346,17 @@ private void setImageView()
             public void onClick(View v) {
                 if (index < dsODapAn.size()) {
 
+                    if (mBool == true) {
+
+                        pop.setVolume(100, 100);
+                        pop.start();
+
+                    } else
+
+                    {
+                        pop.start();
+                        pop.pause();
+                    }
                     String chuoi = ((TextView) v).getText().toString();
                     chuoikq.append(chuoi);
                     dsODapAn.get(index).setText(chuoi);
@@ -384,6 +413,16 @@ private void setImageView()
 
     private void soSanhKetQua(String s, View v) {
         if (s.equals(chuoikq.toString())) {
+            if (mBool == true) {
+                mtrue.setVolume(100, 100);
+                mtrue.start();
+
+            } else
+
+            {
+                mtrue.start();
+                mtrue.pause();
+            }
             boolean x = true;
             SharedPreferences ghi = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = ghi.edit();
@@ -399,13 +438,25 @@ private void setImageView()
             intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
             intent.putExtra("cauhoi", tvCauHoi.getText().toString());
             intent.putExtra("tien", tvTien.getText().toString());
+            intent.putExtra("statusmusic", mBool);
             startActivity(intent);
             finish();
 
         } else {
-            v.setClickable(false);
-            // luotchoi--;
-            // btLuotChoi.setText(String.valueOf(luotchoi));
+            if (mBool == true) {
+                fail.setVolume(100, 100);
+                fail.start();
+
+            } else
+
+            {
+                fail.start();
+                fail.pause();
+            }
+
+            for (int i = 0; i < dsOChon.size(); i++) {
+                dsOChon.get(i).setClickable(false);
+            }
             tvSai.setText("Bạn đã chọn đáp án sai");
             tvSai.setVisibility(View.VISIBLE);
             for (int j = 0; j < dsODapAn.size(); j++) {
@@ -484,7 +535,6 @@ private void setImageView()
         aBoolean = lay.getBoolean("boolean", true);
         Log.d("getBoolean", String.valueOf(aBoolean));
 
-
         btHint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -496,6 +546,7 @@ private void setImageView()
                         mDatabase.child(dsKey.get(i)).child("money").setValue(money);
                         tvTien.setText(String.valueOf(money));
                         aBoolean = false;
+                        Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
                     }
                     boolean x = aBoolean;
                     SharedPreferences ghi = getPreferences(MODE_PRIVATE);
@@ -506,8 +557,8 @@ private void setImageView()
                     dialogGoiY.setCancelable(false);
                     dialogGoiY.show(getFragmentManager(), "cde");
                     dialogGoiY.setGoiy(goiy);
-                    dialogGoiY.setTieude("Thông báo");
-                    Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
+                    dialogGoiY.setTieude("Gợi ý");
+
 
                 }
             }
@@ -515,13 +566,34 @@ private void setImageView()
 
     }
 
+
+    public void setMusic() {
+        mBool = getIntent().getBooleanExtra("statusmusic", true);
+        Log.d("statusmusic",mBool+"");
+        player = MediaPlayer.create(PlayOnlineActivity.this, R.raw.themesong);
+        pop = MediaPlayer.create(PlayOnlineActivity.this, R.raw.pop);
+        fail = MediaPlayer.create(PlayOnlineActivity.this, R.raw.fail);
+        mtrue = MediaPlayer.create(PlayOnlineActivity.this, R.raw.mtrue);
+        if (mBool == true) {
+            player.setLooping(true);
+            player.setVolume(100, 100);
+            player.start();
+
+        } else
+
+        {
+            player.start();
+            player.pause();
+        }
+    }
+
     public void xemQuangCaoTangTien(final int i) {
         SharedPreferences lay = getPreferences(MODE_PRIVATE);
         secondsout = lay.getLong("seconds", 0);
         secondsin = System.currentTimeMillis() / 1000;
-        Log.d("secondsout",secondsout+"");
-        Log.d("secondsin",secondsin+"");
-        Log.d("secondsoutin",(secondsin-secondsout)+"");
+        Log.d("secondsout", secondsout + "");
+        Log.d("secondsin", secondsin + "");
+        Log.d("secondsoutin", (secondsin - secondsout) + "");
         if ((secondsin - secondsout) >= 3600) {
             ivTien.setImageResource(R.drawable.coinicon);
             ivTien.setOnClickListener(new View.OnClickListener() {
@@ -539,8 +611,7 @@ private void setImageView()
                     loadRewardedVideoAd();
                 }
             });
-        }
-        else{
+        } else {
             ivTien.setImageResource(R.drawable.coinicongray);
             ivTien.setOnClickListener(null);
         }
@@ -562,5 +633,18 @@ private void setImageView()
     protected void onPause() {
         mAd.pause(this);
         super.onPause();
+        player.pause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        player.stop();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 }

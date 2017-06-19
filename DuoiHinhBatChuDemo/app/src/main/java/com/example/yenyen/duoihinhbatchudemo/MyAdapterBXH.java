@@ -52,15 +52,15 @@ public class MyAdapterBXH extends ArrayAdapter<User> implements Serializable {
         } else if (position == 2) {
             hang.setImageResource(R.drawable.iconhang3);
             tvHang.setText("");
-        }
-        else {
-            for (int i = 3; i < users.size();i++)
-            {
+        } else {
+            for (int i = 3; i < users.size(); i++) {
                 if (position >= i) {
-                    tvHang.setText(String.valueOf(i+1));
+                    tvHang.setText(String.valueOf(i + 1));
                 }
             }
         }
+        ImageView ivAvatarKhung = (ImageView) convertView.findViewById(R.id.ivAvatarKhung);
+        ivAvatarKhung.setImageResource(R.drawable.listfriendavatarholder);
 
         return convertView;
     }

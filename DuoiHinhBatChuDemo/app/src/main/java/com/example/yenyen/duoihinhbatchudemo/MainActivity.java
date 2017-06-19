@@ -2,13 +2,13 @@ package com.example.yenyen.duoihinhbatchudemo;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -39,9 +39,11 @@ public class MainActivity extends BaseActivity {
     LoginButton btDangNhap;
     private FirebaseAuth mAuth;
     private static final String TAG = "FacebookLogin";
-    User user;
     private ProgressDialog mProgressDialog;
     int count = 0;
+    FirebaseUser mUser;
+    ImageView ivNotiTangQua;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,43 +54,34 @@ public class MainActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference().child("json");
         btChoiThu = (Button) findViewById(R.id.btChoiThu);
         btDangNhap = (LoginButton) findViewById(R.id.btDangNhap);
+        ivNotiTangQua = (ImageView) findViewById(R.id.ivNotiTangQua);
+        ivNotiTangQua.setImageResource(R.drawable.textnotitangqua);
 
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
-        FirebaseUser mUser = mAuth.getCurrentUser();
+        mUser = mAuth.getCurrentUser();
         Log.e("demsoid", count + "");
-        mp = MediaPlayer.create(MainActivity.this, R.raw.intro);
-        mp.setLooping(true);
-        mp.setVolume(100, 100);
-        mp.start();
+       // setMusic();
+        chekUser();
+        setBtDangNhap();
+        setBtChoiThu();
+    }
 
-        if (mUser != null) {
-            mp.stop();
-            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            String image = mAuth.getCurrentUser().getPhotoUrl().toString();
-            if (image != null || image != "") {
-                intent.putExtra("profile_picture", image);
-            }
-            String name = mAuth.getCurrentUser().getDisplayName().toString();
-            intent.putExtra("name", name);
-            startActivity(intent);
-            finish();
-            Log.d("profile_picture", image);
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getUid());
-        }
-
-
-        Typeface typeface = Typeface.createFromAsset(MainActivity.this.getAssets(), "fonts/UTM_Cookies_0.ttf");
-        btDangNhap.setTypeface(typeface);
-        btDangNhap.setReadPermissions("email", "public_profile");
+    private void setBtChoiThu() {
         btChoiThu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                mp.stop();
                 Intent intent = new Intent(MainActivity.this, PlayActivity.class);
                 startActivity(intent);
             }
         });
+
+    }
+
+    private void setBtDangNhap() {
+
+        btDangNhap.setReadPermissions("email", "public_profile");
         btDangNhap.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -113,6 +106,49 @@ public class MainActivity extends BaseActivity {
             }
 
         });
+
+    }
+
+    private void setMusic() {
+
+        mp = MediaPlayer.create(MainActivity.this, R.raw.intro);
+        mp.setLooping(true);
+        mp.setVolume(100, 100);
+        mp.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mp.stop();
+    }
+
+    private void chekUser() {
+        if (mUser != null) {
+            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+            String image = mAuth.getCurrentUser().getPhotoUrl().toString();
+            if (image != null || image != "") {
+                intent.putExtra("profile_picture", image);
+            }
+            String name = mAuth.getCurrentUser().getDisplayName().toString();
+            intent.putExtra("name", name);
+            startActivity(intent);
+            finish();
+            Log.d("profile_picture", image);
+            Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getUid());
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mp.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 
@@ -126,19 +162,18 @@ public class MainActivity extends BaseActivity {
 
     @Override
 
-
     protected void onStart() {
         LoginManager.getInstance().logOut();
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-
+        setMusic();
 
     }
-   private void handleFacebookAccessToken(AccessToken token) {
+
+    private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
         showProgressDialog();
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -163,6 +198,7 @@ public class MainActivity extends BaseActivity {
 
                 });
     }
+
     private void updateUI(FirebaseUser user) {
 
         if (user != null) {
@@ -175,7 +211,7 @@ public class MainActivity extends BaseActivity {
             String name = mAuth.getCurrentUser().getDisplayName().toString();
             String id = Profile.getCurrentProfile().getId();
             intent.putExtra("name", name);
-            intent.putExtra("id",id);
+            intent.putExtra("id", id);
             startActivity(intent);
             finish();
             Log.d("profile_picture", image);

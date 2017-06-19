@@ -18,20 +18,18 @@
         <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
 
             <ImageView
-                android:id="@+id/imageView11"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginLeft="22dp"
-                android:layout_marginTop="3dp"
+                android:id="@+id/ivAvatar"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginLeft="20dp"
                 app:srcCompat="@drawable/avatar" />
 
             <ImageView
-                android:id="@+id/imageView12"
+                android:id="@+id/ivAvatarKhung"
                 android:layout_width="163dp"
                 android:layout_height="50dp"
 
@@ -43,9 +41,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="60dp"
                 android:layout_marginStart="60dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="1000"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="#ffffff"
                 android:textStyle="bold" />
 
             <Button
@@ -59,7 +58,9 @@
                 android:layout_marginStart="110dp"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/buttontim"
-                android:text="5" />
+                android:text="5"
+                android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="#ffffff" />
 
             />
 
@@ -71,7 +72,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imageView13"
+                android:id="@+id/ivCoinIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/frameLayout"
@@ -83,12 +84,15 @@
                 android:id="@+id/tvTien"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="17dp"
                 android:gravity="right"
-                android:text="1000"
+                android:text="0$"
                 android:textColor="#ffffff"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+
+                android:textAppearance="@style/TextAppearance.FontPath"
+                />
         </FrameLayout>
 
     </LinearLayout>
@@ -109,7 +113,7 @@
             />
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/ivPictureBorder"
             android:layout_width="wrap_content"
             android:layout_height="250dp"
             app:srcCompat="@drawable/pictureborder"
@@ -121,18 +125,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical"
-        android:layout_below="@+id/frameLayout2"
         android:layout_above="@+id/linearLayout8"
+        android:layout_below="@+id/frameLayout2"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        >
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bạn đã tìm ra đáp án đúng"
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:textColor="#ffffff"
             android:textSize="25sp" />
 
@@ -143,18 +148,21 @@
             android:layout_marginTop="5dp"
             android:text="Kết quả"
             android:textColor="#ffffff"
-            android:textSize="35dp" />
+            android:textSize="35dp"
+            android:textAppearance="@style/TextAppearance.FontPath"
+            />
 
 
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/linearLayout8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/linearLayout9"
-        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:id="@+id/linearLayout8">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView12"
@@ -162,10 +170,11 @@
             android:layout_height="wrap_content"
             android:text="Bạn được tặng +5"
             android:textColor="#ffffff"
+            android:textAppearance="@style/TextAppearance.FontPath"
             android:textSize="25sp" />
 
         <ImageView
-            android:id="@+id/imageView16"
+            android:id="@+id/ivDolaIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_weight="1"
@@ -173,12 +182,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout9"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btChoiTiep"
             android:layout_width="150dp"

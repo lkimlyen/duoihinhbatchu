@@ -97,13 +97,46 @@ public class MenuActivity extends BaseActivity {
 
             }
         });
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        mBool = lay.getBoolean("boolean", true);
+        btmusic.setChecked(mBool);
 
+        setBtMusic();
 
-        setMusic();
+        //setMusic();
         btChoiNgay();
         showProgressDialog();
         setBtLogout();
 
+    }
+
+    private void setBtMusic() {
+        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i("boolean", String.valueOf(isChecked));
+                if (isChecked) {
+                    mBool = true;
+                    player.setLooping(true);
+                    player.setVolume(100, 100);
+                    player.start();
+                    boolean x = mBool;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putBoolean("boolean", x);
+                    editor.apply();
+                } else {
+                    mBool = false;
+                    player.start();
+                    player.pause();
+                    boolean x = mBool;
+                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                    SharedPreferences.Editor editor = ghi.edit();
+                    editor.putBoolean("boolean", x);
+                    editor.apply();
+                }
+            }
+        });
     }
 
     @Override
@@ -111,6 +144,12 @@ public class MenuActivity extends BaseActivity {
         super.onBackPressed();
         player.stop();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setMusic();
     }
 
     public void getValueFromMainActivity() {
@@ -123,6 +162,7 @@ public class MenuActivity extends BaseActivity {
         btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                player.stop();
                 mAuth.signOut();
                 LoginManager.getInstance().logOut();
                 getUser(null);
@@ -190,8 +230,10 @@ public class MenuActivity extends BaseActivity {
         {
             @Override
             public void onClick(View v) {
+                player.pause();
                 Intent intent = new Intent(MenuActivity.this, PlayOnlineActivity.class);
                 intent.putExtra("image", image);
+                intent.putExtra("statusmusic", mBool);
                 startActivity(intent);
             }
         });
@@ -229,9 +271,7 @@ public class MenuActivity extends BaseActivity {
     }
 
     public void setMusic() {
-        SharedPreferences lay = getPreferences(MODE_PRIVATE);
-        mBool = lay.getBoolean("boolean", true);
-        btmusic.setChecked(mBool);
+
 
         player = MediaPlayer.create(MenuActivity.this, R.raw.intro);
         if (btmusic.isChecked())
@@ -248,32 +288,6 @@ public class MenuActivity extends BaseActivity {
             player.pause();
         }
 
-        btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.i("boolean", String.valueOf(isChecked));
-                if (isChecked) {
-                    mBool = true;
-                    player.setLooping(true);
-                    player.setVolume(100, 100);
-                    player.start();
-                    boolean x = mBool;
-                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = ghi.edit();
-                    editor.putBoolean("boolean", x);
-                    editor.commit();
-                } else {
-                    mBool = false;
-                    player.start();
-                    player.pause();
-                    boolean x = mBool;
-                    SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-                    SharedPreferences.Editor editor = ghi.edit();
-                    editor.putBoolean("boolean", x);
-                    editor.commit();
-                }
-            }
-        });
 
     }
 

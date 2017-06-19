@@ -19,7 +19,9 @@
             android:gravity="center"
             android:text="Bảng xếp hạng"
             android:textColor="#ffffff"
-            android:textSize="30dp" />
+            android:textSize="30dp"
+            android:textAppearance="@style/TextAppearance.FontPath"
+            />
 
         <ListView
             android:id="@+id/dsUser"
@@ -42,7 +44,7 @@
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/ivIconBXH"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginLeft="40dp"

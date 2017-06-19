@@ -47,7 +47,7 @@
             app:srcCompat="@drawable/avatar" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/ivAvatarKhung"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_weight="1"
