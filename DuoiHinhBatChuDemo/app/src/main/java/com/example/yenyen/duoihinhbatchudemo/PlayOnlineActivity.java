@@ -13,6 +13,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -322,7 +324,7 @@ public class PlayOnlineActivity extends BaseActivity {
 
                 }
                 if (index == dsODapAn.size()) {
-                    soSanhKetQua(s, v);
+                    soSanhKetQua(s);
                 }
 
             }
@@ -367,7 +369,7 @@ public class PlayOnlineActivity extends BaseActivity {
                     ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
                 }
                 if (index == dsODapAn.size()) {
-                    soSanhKetQua(s, v);
+                    soSanhKetQua(s);
                 }
             }
         });
@@ -411,7 +413,7 @@ public class PlayOnlineActivity extends BaseActivity {
     }
 
 
-    private void soSanhKetQua(String s, View v) {
+    private void soSanhKetQua(String s) {
         if (s.equals(chuoikq.toString())) {
             if (mBool == true) {
                 mtrue.setVolume(100, 100);
@@ -428,19 +430,33 @@ public class PlayOnlineActivity extends BaseActivity {
             SharedPreferences.Editor editor = ghi.edit();
             editor.putBoolean("boolean", x);
             editor.commit();
+            animate(layout);
+            animate(layout3);
+            animateTV(tvSai);
             tvSai.setText("Bạn đã chọn đáp án đúng");
             tvSai.setVisibility(View.VISIBLE);
             for (int j = 0; j < dsODapAn.size(); j++) {
                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
             }
-            Intent intent = new Intent(PlayOnlineActivity.this, ResultPlayOnlineActivity.class);
-            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-            intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-            intent.putExtra("tien", tvTien.getText().toString());
-            intent.putExtra("statusmusic", mBool);
-            startActivity(intent);
-            finish();
+            CountDownTimer countDownTimer = new CountDownTimer(3000,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Intent intent = new Intent(PlayOnlineActivity.this, ResultPlayOnlineActivity.class);
+                    intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+                    intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
+                    intent.putExtra("cauhoi", tvCauHoi.getText().toString());
+                    intent.putExtra("tien", tvTien.getText().toString());
+                    intent.putExtra("statusmusic", mBool);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            countDownTimer.start();
 
         } else {
             if (mBool == true) {
@@ -453,7 +469,8 @@ public class PlayOnlineActivity extends BaseActivity {
                 fail.start();
                 fail.pause();
             }
-
+            animate(layout);
+            animate(layout3);
             for (int i = 0; i < dsOChon.size(); i++) {
                 dsOChon.get(i).setClickable(false);
             }
@@ -484,6 +501,25 @@ public class PlayOnlineActivity extends BaseActivity {
             };
             timer.start();
         }
+    }
+
+    public void animate(LinearLayout ll) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        animation.setDuration(500);
+        ll.setAnimation(animation);
+        ll.animate();
+        animation.start();
+
+    }
+
+    public void animateTV(TextView tv) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
+        animation.setDuration(500);
+        tv.setAnimation(animation);
+        tv.animate();
+        animation.setRepeatCount(3);
+        animation.start();
+
     }
 
     public void setBtInvite() {
@@ -569,7 +605,7 @@ public class PlayOnlineActivity extends BaseActivity {
 
     public void setMusic() {
         mBool = getIntent().getBooleanExtra("statusmusic", true);
-        Log.d("statusmusic",mBool+"");
+        Log.d("statusmusic", mBool + "");
         player = MediaPlayer.create(PlayOnlineActivity.this, R.raw.themesong);
         pop = MediaPlayer.create(PlayOnlineActivity.this, R.raw.pop);
         fail = MediaPlayer.create(PlayOnlineActivity.this, R.raw.fail);

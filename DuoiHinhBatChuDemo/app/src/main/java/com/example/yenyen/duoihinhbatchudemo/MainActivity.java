@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -56,6 +58,7 @@ public class MainActivity extends BaseActivity {
         btDangNhap = (LoginButton) findViewById(R.id.btDangNhap);
         ivNotiTangQua = (ImageView) findViewById(R.id.ivNotiTangQua);
         ivNotiTangQua.setImageResource(R.drawable.textnotitangqua);
+        animate(ivNotiTangQua);
 
         mAuth = FirebaseAuth.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
@@ -137,6 +140,15 @@ public class MainActivity extends BaseActivity {
             Log.d("profile_picture", image);
             Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getUid());
         }
+
+    }
+    public void animate(View view) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.zoomout);
+        animation.setDuration(500);
+        view.setAnimation(animation);
+        view.animate();
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.start();
 
     }
 

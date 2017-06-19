@@ -18,6 +18,8 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -219,58 +221,7 @@ public class PlayActivity extends BaseActivity {
                         ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
                     }
                     if (index == dsODapAn.size()) {
-                        if (s.equals(chuoikq.toString())) {
-                            mtrue.start();
-                            tvSai.setText("Bạn đã chọn đáp án đúng");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
-                            }
-                            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
-                            helper.updateStatus(ch);
-
-                            Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
-                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-
-                            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-                            intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            fail.start();
-                            for (int i = 0; i < dsOChon.size(); i++) {
-                                dsOChon.get(i).setClickable(false);
-                            }
-                            luotchoi--;
-                            btLuotChoi.setText(String.valueOf(luotchoi));
-                            tvSai.setText("Bạn đã chọn đáp án sai");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-                            }
-                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    dsIVDapAn.clear();
-                                    dsODapAn.clear();
-                                    dsItem.clear();
-                                    layout3.removeAllViews();
-                                    layout2.removeAllViews();
-                                    layout.removeAllViews();
-                                    layout1.removeAllViews();
-                                    index = 0;
-
-                                    tvSai.setVisibility(View.INVISIBLE);
-                                    hienthi();
-                                }
-                            };
-                            timer.start();
-                        }
+                        soSanhKetQua(s);
                     }
                 }
             });
@@ -305,57 +256,8 @@ public class PlayActivity extends BaseActivity {
 
                     }
                     if (index == dsODapAn.size()) {
-                        if (s.equals(chuoikq.toString())) {
-                            mtrue.start();
-                            tvSai.setText("Bạn đã chọn đáp án đúng");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
-                            }
-                            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
-                            helper.updateStatus(ch);
-
-                            Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
-                            intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
-                            intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
-                            intent.putExtra("cauhoi", tvCauHoi.getText().toString());
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-                            fail.start();
-                            for (int i = 0; i < dsOChon.size(); i++) {
-                                dsOChon.get(i).setClickable(false);
-                            }
-                            btLuotChoi.setText(String.valueOf(luotchoi));
-                            tvSai.setText("Bạn đã chọn đáp án sai");
-                            tvSai.setVisibility(View.VISIBLE);
-                            for (int j = 0; j < dsODapAn.size(); j++) {
-                                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
-                            }
-                            CountDownTimer timer = new CountDownTimer(3000, 1000) {
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                }
-
-                                @Override
-                                public void onFinish() {
-                                    dsIVDapAn.clear();
-                                    dsODapAn.clear();
-                                    dsItem.clear();
-                                    layout3.removeAllViews();
-                                    layout2.removeAllViews();
-                                    layout.removeAllViews();
-                                    layout1.removeAllViews();
-                                    index = 0;
-                                    tvSai.setVisibility(View.INVISIBLE);
-                                    hienthi();
-                                }
-                            };
-                            timer.start();
-                        }
+                    soSanhKetQua(s);
                     }
-
                 }
             });
             textview2.setText(dsItem.get(j));
@@ -411,6 +313,24 @@ public class PlayActivity extends BaseActivity {
         player.setVolume(100, 100);
         player.start();
     }
+    public void animate(LinearLayout ll){
+        Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.scale);
+        animation.setDuration(500);
+        ll.setAnimation(animation);
+        ll.animate();
+        animation.start();
+
+    }
+
+    public void animateTV(TextView tv){
+        Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.scale);
+        animation.setDuration(500);
+        tv.setAnimation(animation);
+        tv.animate();
+        animation.setRepeatCount(3);
+        animation.start();
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -430,4 +350,75 @@ public class PlayActivity extends BaseActivity {
         super.onResume();
         player.start();
     }
+    private void soSanhKetQua(String s){
+        if (s.equals(chuoikq.toString())) {
+            animate(layout3);
+            animate(layout);
+            mtrue.start();
+
+            animateTV(tvSai);
+            tvSai.setText("Bạn đã chọn đáp án đúng");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
+            }
+            CauHoi ch = new CauHoi(dsCauHoi.get(vitri).id, 1);
+            helper.updateStatus(ch);
+            CountDownTimer countDownTimer= new CountDownTimer(3000,1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    Intent intent = new Intent(PlayActivity.this, ResultActivity.class);
+                    intent.putExtra("kq", dsCauHoi.get(vitri).fullAnswer);
+
+                    intent.putExtra("image", dsCauHoi.get(vitri).imagePath);
+                    intent.putExtra("cauhoi", tvCauHoi.getText().toString());
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            countDownTimer.start();
+        } else {
+            fail.start();
+            for (int i = 0; i < dsOChon.size(); i++) {
+                dsOChon.get(i).setClickable(false);
+            }
+            animate(layout3);
+            animate(layout);
+            luotchoi--;
+            btLuotChoi.setText(String.valueOf(luotchoi));
+            tvSai.setText("Bạn đã chọn đáp án sai");
+            tvSai.setVisibility(View.VISIBLE);
+            for (int j = 0; j < dsODapAn.size(); j++) {
+                dsIVDapAn.get(j).setImageResource(R.drawable.tilefalse);
+            }
+            CountDownTimer timer = new CountDownTimer(3000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+
+                @Override
+                public void onFinish() {
+                    dsIVDapAn.clear();
+                    dsODapAn.clear();
+                    dsItem.clear();
+                    layout3.removeAllViews();
+                    layout2.removeAllViews();
+                    layout.removeAllViews();
+                    layout1.removeAllViews();
+                    index = 0;
+
+                    tvSai.setVisibility(View.INVISIBLE);
+                    hienthi();
+                }
+            };
+            timer.start();
+        }
+    }
+
 }
