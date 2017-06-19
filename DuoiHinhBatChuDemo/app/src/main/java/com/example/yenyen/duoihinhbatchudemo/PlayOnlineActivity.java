@@ -76,6 +76,7 @@ public class PlayOnlineActivity extends BaseActivity {
     long secondsout, secondsin;
     MediaPlayer player, pop, fail, mtrue;
     Boolean mBool;
+    int luotchoi = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +190,7 @@ public class PlayOnlineActivity extends BaseActivity {
         });
         setBtInvite();
         setMusic();
-
+        setLuotChoi();
     }
 
     private void loadRewardedVideoAd() {
@@ -223,6 +224,27 @@ public class PlayOnlineActivity extends BaseActivity {
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
         tvTruDiem = (TextView) findViewById(R.id.tvTruDiem);
         tvTruDiem.setVisibility(View.INVISIBLE);
+    }
+
+    private void setLuotChoi() {
+        luotchoi = Integer.parseInt(btLuotChoi.getText().toString());
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        long secondsout = lay.getLong("secondsout", 0);
+        long secondsin = System.currentTimeMillis() / 1000;
+        luotchoi = lay.getInt("luotchoi", 5);
+        btLuotChoi.setText(String.valueOf(luotchoi));
+        if (luotchoi < 5) {
+
+            if ((secondsin - secondsout) > 900) {
+                luotchoi++;
+                btLuotChoi.setText(String.valueOf(luotchoi));
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putInt("luotchoi", luotchoi);
+                editor.commit();
+
+            }
+        }
     }
 
     private void setImageView() {
@@ -314,49 +336,56 @@ public class PlayOnlineActivity extends BaseActivity {
     }
 
     public void clickTextViewOTraLoi(View v, final String s) {
-        String chuoi = ((TextView) v).getText().toString();
-        int dem = 0;
-        for (int i = 0; i < index; i++) {
-            if (dsODapAn.get(i).getText().toString().equals("")) {
-                dsODapAn.get(i).setText(chuoi);
-                dsODapAn.get(i).setTag(v);
-                dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
-                ((TextView) v).setText("");
-                v.setClickable(false);
-                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-                dem++;
-                break;
-            }
-
-        }
-        if (dem == 0) {
-            if (index < dsODapAn.size()) {
-                if (mBool == true) {
-
-                    pop.setVolume(100, 100);
-                    pop.start();
-
-                } else
-
-                {
-                    pop.start();
-                    pop.pause();
+        if (luotchoi == 0) {
+            CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+            dialogGoiY.setCancelable(false);
+            dialogGoiY.show(getFragmentManager(), "abc");
+            dialogGoiY.setGoiy("Bạn đã hết lượt chơi, vui lòng quay lại sau");
+            dialogGoiY.setTieude("Thông báo");
+        } else {
+            String chuoi = ((TextView) v).getText().toString();
+            int dem = 0;
+            for (int i = 0; i < index; i++) {
+                if (dsODapAn.get(i).getText().toString().equals("")) {
+                    dsODapAn.get(i).setText(chuoi);
+                    dsODapAn.get(i).setTag(v);
+                    dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+                    dem++;
+                    break;
                 }
-                dsODapAn.get(index).setText(chuoi);
-                dsODapAn.get(index).setTag(v);
-                dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                index++;
-                ((TextView) v).setText("");
-                v.setClickable(false);
-                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
 
             }
-            if (index == dsODapAn.size()) {
-                soSanhKetQua(s);
+            if (dem == 0) {
+                if (index < dsODapAn.size()) {
+                    if (mBool == true) {
+
+                        pop.setVolume(100, 100);
+                        pop.start();
+
+                    } else
+
+                    {
+                        pop.start();
+                        pop.pause();
+                    }
+                    dsODapAn.get(index).setText(chuoi);
+                    dsODapAn.get(index).setTag(v);
+                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                    index++;
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+
+                }
+                if (index == dsODapAn.size()) {
+                    soSanhKetQua(s);
+                }
             }
+
         }
-
-
     }
 
     private void setLayout1(LayoutInflater inf, final String s, int i) {
@@ -468,9 +497,11 @@ public class PlayOnlineActivity extends BaseActivity {
                 mtrue.pause();
             }
             boolean x = true;
+            luotchoi = 5;
             SharedPreferences ghi = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = ghi.edit();
             editor.putBoolean("boolean", x);
+            editor.putInt("luotchoi", luotchoi);
             editor.commit();
             animate(layout);
             animate(layout3);
@@ -480,6 +511,10 @@ public class PlayOnlineActivity extends BaseActivity {
             for (int j = 0; j < dsODapAn.size(); j++) {
                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
             }
+
+
+
+
             CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -499,7 +534,9 @@ public class PlayOnlineActivity extends BaseActivity {
             };
             countDownTimer.start();
 
-        } else {
+        } else
+
+        {
             if (mBool == true) {
                 fail.setVolume(100, 100);
                 fail.start();
@@ -515,6 +552,18 @@ public class PlayOnlineActivity extends BaseActivity {
             for (int i = 0; i < dsOChon.size(); i++) {
                 dsOChon.get(i).setClickable(false);
             }
+            if (luotchoi > 0) {
+                luotchoi--;
+                long seconds = System.currentTimeMillis() / 1000;
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putLong("secondsout", seconds);
+                editor.putInt("luotchoi", luotchoi);
+                editor.apply();
+
+            }
+
+            btLuotChoi.setText(String.valueOf(luotchoi));
             tvSai.setText("Bạn đã chọn đáp án sai");
             tvSai.setVisibility(View.VISIBLE);
             for (int j = 0; j < dsODapAn.size(); j++) {
@@ -544,6 +593,7 @@ public class PlayOnlineActivity extends BaseActivity {
             timer.start();
         }
     }
+
 
     public void animate(LinearLayout ll) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);

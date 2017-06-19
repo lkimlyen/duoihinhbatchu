@@ -118,7 +118,28 @@ public class PlayActivity extends BaseActivity {
         ivAvatarKhung = (ImageView) findViewById(R.id.ivAvatarKhung);
         ivDolaIcon = (ImageView) findViewById(R.id.ivDolaIcon);
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
+        setLuotChoi();
+    }
 
+    private void setLuotChoi() {
+        luotchoi = Integer.parseInt(btLuotChoi.getText().toString());
+        SharedPreferences lay = getPreferences(MODE_PRIVATE);
+        long secondsout = lay.getLong("secondsout", 0);
+        long secondsin = System.currentTimeMillis() / 1000;
+        luotchoi = lay.getInt("luotchoi", 5);
+        btLuotChoi.setText(String.valueOf(luotchoi));
+        if (luotchoi < 5) {
+
+            if ((secondsin - secondsout) > 900) {
+                luotchoi++;
+                btLuotChoi.setText(String.valueOf(luotchoi));
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putInt("luotchoi", luotchoi);
+                editor.commit();
+
+            }
+        }
     }
 
     public void hienthi() {
@@ -197,41 +218,48 @@ public class PlayActivity extends BaseActivity {
     }
 
     public void clickTextViewOTraLoi(View v, final String s) {
-        String chuoi = ((TextView) v).getText().toString();
-        int dem = 0;
-        for (int i = 0; i < index; i++) {
-            if (dsODapAn.get(i).getText().toString().equals("")) {
-                dsODapAn.get(i).setText(chuoi);
-                dsODapAn.get(i).setTag(v);
-                dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
-                ((TextView) v).setText("");
-                v.setClickable(false);
-                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-                dem++;
-                break;
-            }
+        if (luotchoi == 0) {
+            CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+            dialogGoiY.setCancelable(false);
+            dialogGoiY.show(getFragmentManager(), "abc");
+            dialogGoiY.setGoiy("Bạn đã hết lượt chơi, vui lòng quay lại sau");
+            dialogGoiY.setTieude("Thông báo");
+        } else {
 
+            String chuoi = ((TextView) v).getText().toString();
+            int dem = 0;
+            for (int i = 0; i < index; i++) {
+                if (dsODapAn.get(i).getText().toString().equals("")) {
+                    dsODapAn.get(i).setText(chuoi);
+                    dsODapAn.get(i).setTag(v);
+                    dsIVDapAn.get(i).setImageResource(R.drawable.tilehover);
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+                    dem++;
+                    break;
+                }
+
+            }
+            if (dem == 0) {
+                if (index < dsODapAn.size()) {
+
+                    pop.setVolume(100, 100);
+                    pop.start();
+                    dsODapAn.get(index).setText(chuoi);
+                    dsODapAn.get(index).setTag(v);
+                    dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
+                    index++;
+                    ((TextView) v).setText("");
+                    v.setClickable(false);
+                    ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
+
+                }
+                if (index == dsODapAn.size()) {
+                    soSanhKetQua(s);
+                }
+            }
         }
-        if (dem == 0) {
-            if (index < dsODapAn.size()) {
-
-                pop.setVolume(100, 100);
-                pop.start();
-                dsODapAn.get(index).setText(chuoi);
-                dsODapAn.get(index).setTag(v);
-                dsIVDapAn.get(index).setImageResource(R.drawable.tilehover);
-                index++;
-                ((TextView) v).setText("");
-                v.setClickable(false);
-                ((ImageView) v.getTag()).setVisibility(View.INVISIBLE);
-
-            }
-            if (index == dsODapAn.size()) {
-                soSanhKetQua(s);
-            }
-        }
-
-
     }
 
     private void setLayout1(LayoutInflater inf, final String s, int i) {
@@ -336,9 +364,11 @@ public class PlayActivity extends BaseActivity {
             mtrue.start();
 
             boolean x = true;
+            luotchoi = 5;
             SharedPreferences ghi = getPreferences(MODE_PRIVATE);
             SharedPreferences.Editor editor = ghi.edit();
             editor.putBoolean("boolean", x);
+            editor.putInt("luotchoi", luotchoi);
             editor.commit();
             animate(layout);
             animate(layout3);
@@ -367,7 +397,16 @@ public class PlayActivity extends BaseActivity {
             countDownTimer.start();
 
         } else {
+            if (luotchoi > 0) {
+                luotchoi--;
+                long seconds = System.currentTimeMillis() / 1000;
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putLong("secondsout", seconds);
+                editor.putInt("luotchoi", luotchoi);
+                editor.apply();
 
+            }
             fail.setVolume(100, 100);
             fail.start();
             animate(layout);
