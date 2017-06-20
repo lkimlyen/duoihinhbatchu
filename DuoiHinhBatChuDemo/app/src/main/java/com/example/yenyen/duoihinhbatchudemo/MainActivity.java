@@ -103,8 +103,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "facebook:onError", error);
-                // ...
+                CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+                dialogGoiY.setCancelable(false);
+                dialogGoiY.show(getFragmentManager(), "cde");
+                dialogGoiY.setGoiy("Bạn vui lòng kết nối mạng để tiếp tục");
+                dialogGoiY.setTieude("Thông báo");
 
             }
 

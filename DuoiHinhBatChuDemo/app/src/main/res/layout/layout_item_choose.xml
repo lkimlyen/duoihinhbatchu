@@ -21,5 +21,7 @@
          android:textColor="#ffffff"
         android:textSize="25sp"
         android:textStyle="bold"
+        android:shadowRadius="3"
+        android:shadowColor="#B43104"
         android:textAppearance="@style/TextAppearance.FontPath"/>
 </RelativeLayout>

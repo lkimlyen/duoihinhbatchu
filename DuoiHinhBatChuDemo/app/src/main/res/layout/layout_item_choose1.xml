@@ -18,6 +18,8 @@
         android:textStyle="bold"
         android:textSize="25sp"
         android:textColor="#ffffff"
+        android:shadowRadius="3"
+        android:shadowColor="#B43104"
         android:textAppearance="@style/TextAppearance.FontPath"
        />
 </FrameLayout>

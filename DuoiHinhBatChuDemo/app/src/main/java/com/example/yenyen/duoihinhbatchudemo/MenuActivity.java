@@ -1,19 +1,25 @@
 package com.example.yenyen.duoihinhbatchudemo;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.facebook.share.widget.ShareDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +44,7 @@ public class MenuActivity extends BaseActivity {
     Boolean aBoolean = true;
     private FirebaseAuth mAuth;
     int score, money;
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +61,12 @@ public class MenuActivity extends BaseActivity {
         btChoiNgay = (Button) findViewById(R.id.btChoiNgay);
         btBXH = (Button) findViewById(R.id.btBXH);
         btLogout = (Button) findViewById(R.id.btLogout);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         getValueFromMainActivity();
+        if (isOnline() == false) {
+            Toast.makeText(this, "Bạn vui lòng kết nối mạng để tiếp tục trò chơi", Toast.LENGTH_SHORT).show();
+        }
 
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -102,8 +113,6 @@ public class MenuActivity extends BaseActivity {
         btmusic.setChecked(mBool);
 
         setBtMusic();
-
-        //setMusic();
         btChoiNgay();
         showProgressDialog();
         setBtLogout();
@@ -207,6 +216,8 @@ public class MenuActivity extends BaseActivity {
             if (dsUser.get(i).id.toString().equals(userId)) {
                 score = dsUser.get(i).score;
                 money = dsUser.get(i).money;
+                final ShareDialog shareDialog = new ShareDialog(MenuActivity.this);
+                final View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
                 btProfile.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -217,6 +228,9 @@ public class MenuActivity extends BaseActivity {
                         dialogUser.setImage(image);
                         dialogUser.setMoney(money);
                         dialogUser.setScore(score);
+                        dialogUser.setRootView(rootView);
+                        dialogUser.setContext(MenuActivity.this);
+                        dialogUser.setShareDialog(shareDialog);
                     }
                 });
                 break;
@@ -230,11 +244,19 @@ public class MenuActivity extends BaseActivity {
         {
             @Override
             public void onClick(View v) {
-                player.pause();
-                Intent intent = new Intent(MenuActivity.this, PlayOnlineActivity.class);
-                intent.putExtra("image", image);
-                intent.putExtra("statusmusic", mBool);
-                startActivity(intent);
+                if (isOnline() == false) {
+                    CustomDialogGoiY dialogGoiY = new CustomDialogGoiY();
+                    dialogGoiY.setCancelable(false);
+                    dialogGoiY.show(getFragmentManager(), "cde");
+                    dialogGoiY.setGoiy("Bạn vui lòng kết nối mạng để tiếp tục");
+                    dialogGoiY.setTieude("Thông báo");
+                } else {
+                    player.pause();
+                    Intent intent = new Intent(MenuActivity.this, PlayOnlineActivity.class);
+                    intent.putExtra("image", image);
+                    intent.putExtra("statusmusic", mBool);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -307,5 +329,12 @@ public class MenuActivity extends BaseActivity {
             }
         };
         countDownTimer.start();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

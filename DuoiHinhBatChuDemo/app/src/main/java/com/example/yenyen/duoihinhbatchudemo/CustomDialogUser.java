@@ -2,6 +2,8 @@ package com.example.yenyen.duoihinhbatchudemo;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +13,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
+
 /**
  * Created by yenyen on 6/16/2017.
  */
@@ -18,7 +24,22 @@ import android.widget.TextView;
 public class CustomDialogUser extends DialogFragment {
     String name;
     int money, score;
+    Context context;
+    ShareDialog shareDialog;
 
+    public void setShareDialog(ShareDialog shareDialog) {
+        this.shareDialog = shareDialog;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setRootView(View rootView) {
+        this.rootView = rootView;
+    }
+
+    View rootView;
     public void setImage(String image) {
         this.image = image;
     }
@@ -53,7 +74,15 @@ public class CustomDialogUser extends DialogFragment {
         dialog.findViewById(R.id.btChiaSe).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //postPicture();
+                Bitmap bitmap = takeScreenshot();
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(bitmap)
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+                shareDialog.show(content);
+
             }
         });
         TextView name = (TextView) dialog.findViewById(R.id.tvName);
@@ -79,6 +108,11 @@ public class CustomDialogUser extends DialogFragment {
         ImageView ivAvatarKhung = (ImageView) dialog.findViewById(R.id.ivAvatarKhung);
         ivAvatarKhung.setImageResource(R.drawable.listfriendavatarholder);
         return dialog;
+    }
+
+    private Bitmap takeScreenshot() {
+        rootView.setDrawingCacheEnabled(true);
+        return rootView.getDrawingCache();
     }
 
 }

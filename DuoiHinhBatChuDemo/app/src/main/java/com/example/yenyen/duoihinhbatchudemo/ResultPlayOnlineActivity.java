@@ -2,6 +2,7 @@ package com.example.yenyen.duoihinhbatchudemo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.Profile;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,17 +31,17 @@ import java.util.ArrayList;
 public class ResultPlayOnlineActivity extends BaseActivity {
     TextView textView, tvCauHoi, tvTien;
     ImageView imageView, ivAvatar, ivAvatarKhung, ivCoinIcon, ivPictureBorder, ivDolaIcon;
-    ;
-    Button btChoiTiep;
+    ShareDialog shareDialog;
+    Button btChoiTiep, btShare;
     String imageName;
     StorageReference storageRef;
     FirebaseStorage storage;
     private FirebaseAuth mAuth;
-    String image;
+    String image, userId;
     DatabaseReference mDatabase;
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dskey = new ArrayList<>();
-    String userId;
+    View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,8 @@ public class ResultPlayOnlineActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         getUser(mUser);
-
+        shareDialog = new ShareDialog(ResultPlayOnlineActivity.this);
+        rootView = getWindow().getDecorView().findViewById(android.R.id.content);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
 
         anhxa();
@@ -100,6 +105,7 @@ public class ResultPlayOnlineActivity extends BaseActivity {
         });
 
         setBtChoiTiep();
+        setBtShare();
     }
 
     private void setBtChoiTiep() {
@@ -113,7 +119,7 @@ public class ResultPlayOnlineActivity extends BaseActivity {
                 editor.commit();
                 Intent intent = new Intent(ResultPlayOnlineActivity.this, PlayOnlineActivity.class);
                 boolean mBool = getIntent().getBooleanExtra("statusmusic", true);
-                intent.putExtra("statusmusic",mBool);
+                intent.putExtra("statusmusic", mBool);
                 startActivity(intent);
                 finish();
 
@@ -147,8 +153,24 @@ public class ResultPlayOnlineActivity extends BaseActivity {
         ivDolaIcon = (ImageView) findViewById(R.id.ivDolaIcon);
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
         ivCoinIcon = (ImageView) findViewById(R.id.ivCoinIcon);
+        btShare = (Button) findViewById(R.id.btShare);
     }
 
+    private void setBtShare() {
+        btShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap = takeScreenshot();
+                SharePhoto photo = new SharePhoto.Builder()
+                        .setBitmap(bitmap)
+                        .build();
+                SharePhotoContent content = new SharePhotoContent.Builder()
+                        .addPhoto(photo)
+                        .build();
+                shareDialog.show(content);
+            }
+        });
+    }
 
     private void getUser(FirebaseUser user) {
         if (user != null) {
@@ -157,5 +179,9 @@ public class ResultPlayOnlineActivity extends BaseActivity {
         }
     }
 
+    private Bitmap takeScreenshot() {
+        rootView.setDrawingCacheEnabled(true);
+        return rootView.getDrawingCache();
+    }
 
 }

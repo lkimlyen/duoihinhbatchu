@@ -3,7 +3,10 @@
     package="com.example.yenyen.duoihinhbatchudemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:name=".CalligraphyApplication"
         android:allowBackup="true"
@@ -27,7 +30,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
-
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1840625169588275"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
         <activity android:name=".MenuActivity" />
         <activity android:name=".ResultActivity" />
         <activity android:name=".PlayActivity" />

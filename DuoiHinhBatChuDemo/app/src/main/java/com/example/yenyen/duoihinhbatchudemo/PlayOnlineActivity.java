@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -89,7 +91,9 @@ public class PlayOnlineActivity extends BaseActivity {
         setImageView();
         getData();
         getUser(mUser);
-
+        if (isOnline() == false) {
+            Toast.makeText(this, "Kết nối mạng đã bị ngắt", Toast.LENGTH_LONG).show();
+        }
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
@@ -191,6 +195,7 @@ public class PlayOnlineActivity extends BaseActivity {
         setBtInvite();
         setMusic();
         setLuotChoi();
+
     }
 
     private void loadRewardedVideoAd() {
@@ -513,8 +518,6 @@ public class PlayOnlineActivity extends BaseActivity {
             }
 
 
-
-
             CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -720,6 +723,12 @@ public class PlayOnlineActivity extends BaseActivity {
 
     }
 
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
 
     public void setMusic() {
         mBool = getIntent().getBooleanExtra("statusmusic", true);
