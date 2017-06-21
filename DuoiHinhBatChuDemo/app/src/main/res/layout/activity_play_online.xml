@@ -6,35 +6,36 @@
     android:layout_height="match_parent"
     android:background="@drawable/gameplaybackground"
     tools:context="com.example.yenyen.duoihinhbatchudemo.ResultActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/tvTruDiem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-20"
             android:layout_marginLeft="5dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="-20"
             android:textAppearance="@style/TextAppearance.FontPath"
             android:textColor="#f00"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:gravity="center"/>
+            android:textStyle="bold" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
@@ -71,8 +72,8 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text=""
-                android:textColor="#ffffff"
                 android:textAppearance="@style/TextAppearance.FontPath"
+                android:textColor="#ffffff"
                 android:textStyle="bold" />
 
             <Button
@@ -88,7 +89,7 @@
                 android:background="@drawable/buttontim"
                 android:text="5"
                 android:textAppearance="@style/TextAppearance.FontPath"
-                android:textColor="#ffffff"/>
+                android:textColor="#ffffff" />
 
         </FrameLayout>
 
@@ -130,9 +131,9 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="17dp"
                 android:gravity="right"
+                android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.FontPath"/>
+                android:textStyle="bold" />
         </FrameLayout>
 
     </LinearLayout>
@@ -141,11 +142,12 @@
         android:id="@+id/frameLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/linearLayout">
 
         <ImageView
             android:id="@+id/ivImage"
-            android:layout_width="350dp"
+            android:layout_width="wrap_content"
             android:layout_height="210dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/canthiep"
@@ -155,35 +157,44 @@
         <ImageView
             android:id="@+id/ivPictureBorder"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
+            android:layout_height="210dp"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/pictureborder"
 
             />
 
     </FrameLayout>
 
+    <Button
+        android:id="@+id/btnMenu"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/frameLayout8"
+        android:background="@drawable/buttonmenu" />
+
     <LinearLayout
         android:id="@+id/frameLayout8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@+id/frameLayout2"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:layout_centerHorizontal="true">
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvSai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textColor="#ffffff"
-            android:textAppearance="@style/TextAppearance.FontPath"/>
+            android:textAppearance="@style/TextAppearance.FontPath"
+            android:textColor="#ffffff" />
+
         <LinearLayout
             android:id="@+id/frameLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
-
 
 
         </LinearLayout>

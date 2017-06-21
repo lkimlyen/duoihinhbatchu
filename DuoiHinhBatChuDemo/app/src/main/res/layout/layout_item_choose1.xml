@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/ivTileHover"
         android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_height="53dp"
         app:srcCompat="@drawable/tilehover" />
 
     <TextView
@@ -16,10 +16,11 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:textStyle="bold"
-        android:textSize="25sp"
+        android:textSize="26sp"
+        android:text="T"
         android:textColor="#ffffff"
+        android:shadowColor="#993600"
         android:shadowRadius="3"
-        android:shadowColor="#B43104"
         android:textAppearance="@style/TextAppearance.FontPath"
        />
 </FrameLayout>

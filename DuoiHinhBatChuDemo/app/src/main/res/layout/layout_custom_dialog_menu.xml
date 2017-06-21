@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_weight="3"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+
+
+    <Button
+        android:id="@+id/btHome"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/buttonhome" />
+
+    <Button
+        android:id="@+id/btProfile"
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        android:layout_above="@+id/textView"
+        android:layout_margin="5dp"
+        android:background="@drawable/buttonprofileuser" />
+
+    <Button
+        android:id="@+id/btBXH"
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/buttonbxh" />
+
+
+    <Button
+        android:id="@+id/btQuayLai"
+        android:layout_width="50dp"
+        android:layout_height="45dp"
+        android:background="@drawable/buttonquaylai" />
+
+
+</LinearLayout>

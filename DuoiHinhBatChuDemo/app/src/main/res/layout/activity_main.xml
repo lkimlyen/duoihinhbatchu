@@ -9,39 +9,38 @@
 
 
     <com.facebook.login.widget.LoginButton
-
-         android:layout_gravity="center_horizontal"
         android:id="@+id/btDangNhap"
         android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="15dp"
-        android:text="Đăng nhập Facebook"
-        tools:layout_editor_absoluteX="135dp"
-        tools:layout_editor_absoluteY="392dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#ffffff"
+        android:layout_height="100dp"
         android:layout_above="@+id/btChoiThu"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@style/TextAppearance.FontPath"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:textAppearance="@style/TextAppearance.FontPath"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="392dp" />
 
     <ImageView
         android:id="@+id/ivNotiTangQua"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/textnotitangqua"
-        android:layout_marginBottom="21dp"
         android:layout_above="@+id/btDangNhap"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="21dp"
+        app:srcCompat="@drawable/textnotitangqua" />
 
     <Button
         android:id="@+id/btChoiThu"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:background="@drawable/buttonchoithu"
-        android:layout_marginBottom="40dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/btDangNhap"
-        android:layout_alignStart="@+id/btDangNhap" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/btDangNhap"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/buttonchoithu" />
 </RelativeLayout>

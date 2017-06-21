@@ -115,19 +115,17 @@
 
         <ImageView
             android:id="@+id/ivImage"
-            android:layout_width="350dp"
+            android:layout_width="wrap_content"
             android:layout_height="210dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/canthiep"
-
             />
 
         <ImageView
             android:id="@+id/ivPictureBorder"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
+            android:layout_height="210dp"
             app:srcCompat="@drawable/pictureborder"
-
             />
 
     </FrameLayout>

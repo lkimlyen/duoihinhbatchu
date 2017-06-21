@@ -16,6 +16,8 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +44,7 @@ public class ResultPlayOnlineActivity extends BaseActivity {
     ArrayList<User> dsUser = new ArrayList<>();
     ArrayList<String> dskey = new ArrayList<>();
     View rootView;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,12 @@ public class ResultPlayOnlineActivity extends BaseActivity {
         shareDialog = new ShareDialog(ResultPlayOnlineActivity.this);
         rootView = getWindow().getDecorView().findViewById(android.R.id.content);
         mDatabase = FirebaseDatabase.getInstance().getReference().child("json").child("Users");
-
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-9912852468951137/7863744006");
+        mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("897C0897019A2718E2407F03124C44D7").build());
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
         anhxa();
 
         setImageView();

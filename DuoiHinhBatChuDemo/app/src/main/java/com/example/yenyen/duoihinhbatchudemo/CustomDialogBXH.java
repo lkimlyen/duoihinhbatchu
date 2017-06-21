@@ -45,6 +45,12 @@ public class CustomDialogBXH extends DialogFragment {
                 dismiss();
             }
         });
+        dialog.findViewById(R.id.btDong).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
         ListView listView = (ListView) dialog.findViewById(R.id.dsUser);
         adapterBXH = new MyAdapterBXH(context, R.layout.layout_listview_item_bxh, users);
         listView.setAdapter(adapterBXH);

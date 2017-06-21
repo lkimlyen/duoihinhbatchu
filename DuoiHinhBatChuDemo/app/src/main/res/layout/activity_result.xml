@@ -99,23 +99,23 @@
 
     <FrameLayout
         android:id="@+id/frameLayout2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout">
 
         <ImageView
             android:id="@+id/ivImageCH"
-            android:layout_width="350dp"
+            android:layout_width="wrap_content"
             android:layout_height="210dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/canthiep"
-
             />
 
         <ImageView
             android:id="@+id/ivPictureBorder"
             android:layout_width="wrap_content"
-            android:layout_height="250dp"
+            android:layout_height="210dp"
+            android:layout_gravity="center"
             app:srcCompat="@drawable/pictureborder"
 
             />
@@ -187,16 +187,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
 
         <Button
             android:id="@+id/btChoiTiep"
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_weight="1"
+            android:padding="5dp"
             android:background="@drawable/buttonchoitiep" />
 
         <Button
+
+            android:padding="5dp"
             android:id="@+id/btShare"
             android:layout_width="150dp"
             android:layout_height="40dp"

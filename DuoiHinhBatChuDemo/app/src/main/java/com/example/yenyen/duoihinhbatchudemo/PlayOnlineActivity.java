@@ -30,6 +30,7 @@ import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
+import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -48,6 +49,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 public class PlayOnlineActivity extends BaseActivity {
     ImageView ivAvatar, ivPictureBorder, ivAvatarKhung;
@@ -61,7 +63,7 @@ public class PlayOnlineActivity extends BaseActivity {
     LinearLayout layout, layout1, layout2, layout3;
     ImageView ivImage, imageView1, imageView2, ivTien;
     StorageReference storageRef;
-    Button btHint, btLuotChoi, btInvite;
+    Button btHint, btLuotChoi, btInvite, btnMenu;
     String[] kyTu = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
     ArrayList<String> dsItem = new ArrayList<>();
     ArrayList<TextView> dsODapAn = new ArrayList<>();
@@ -107,9 +109,9 @@ public class PlayOnlineActivity extends BaseActivity {
                             dsUser.add(user);
                             Log.e("CountdsUser", dsUser.size() + "");
                             if (dsUser.size() == dataSnapshot.getChildrenCount()) {
+                                setBtMenu();
                                 for (int i = 0; i < dsUser.size(); i++) {
                                     if (dsUser.get(i).id.toString().equals(id)) {
-
                                         tvCauHoi.setText(String.valueOf(dsUser.get(i).score));
                                         int cauhoi = dsUser.get(i).score - 1;
                                         tvTien.setText(dsUser.get(i).money + "$");
@@ -195,7 +197,6 @@ public class PlayOnlineActivity extends BaseActivity {
         setBtInvite();
         setMusic();
         setLuotChoi();
-
     }
 
     private void loadRewardedVideoAd() {
@@ -229,6 +230,7 @@ public class PlayOnlineActivity extends BaseActivity {
         ivPictureBorder = (ImageView) findViewById(R.id.ivPictureBorder);
         tvTruDiem = (TextView) findViewById(R.id.tvTruDiem);
         tvTruDiem.setVisibility(View.INVISIBLE);
+        btnMenu = (Button) findViewById(R.id.btnMenu);
     }
 
     private void setLuotChoi() {
@@ -242,13 +244,25 @@ public class PlayOnlineActivity extends BaseActivity {
 
             if ((secondsin - secondsout) > 900) {
                 luotchoi++;
-                btLuotChoi.setText(String.valueOf(luotchoi));
-                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-                SharedPreferences.Editor editor = ghi.edit();
-                editor.putInt("luotchoi", luotchoi);
-                editor.commit();
+            }
+            if ((secondsin - secondsout) > 1800) {
+                luotchoi++;
 
             }
+            if ((secondsin - secondsout) > 2700) {
+                luotchoi++;
+            }
+
+            if ((secondsin - secondsout) > 3600) {
+                luotchoi++;
+            }
+            secondsout = System.currentTimeMillis() / 1000;
+            btLuotChoi.setText(String.valueOf(luotchoi));
+            SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+            SharedPreferences.Editor editor = ghi.edit();
+            editor.putInt("luotchoi", luotchoi);
+            editor.putLong("secondsout", secondsout);
+            editor.commit();
         }
     }
 
@@ -484,7 +498,6 @@ public class PlayOnlineActivity extends BaseActivity {
 
     }
 
-
     private void soSanhKetQua(String s) {
         for (int i = 0; i < dsODapAn.size(); i++) {
             chuoikq.append(dsODapAn.get(i).getText().toString());
@@ -597,7 +610,6 @@ public class PlayOnlineActivity extends BaseActivity {
         }
     }
 
-
     public void animate(LinearLayout ll) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
         animation.setDuration(500);
@@ -615,7 +627,6 @@ public class PlayOnlineActivity extends BaseActivity {
         animation.start();
 
     }
-
 
     public void animateTV(TextView tv) {
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
@@ -780,6 +791,45 @@ public class PlayOnlineActivity extends BaseActivity {
         }
     }
 
+    private void setBtMenu() {
+        Collections.sort(dsUser, new Comparator<User>() {
+            public int compare(User o1, User o2) {
+                if (o1.score == o2.score)
+                    return 0;
+                return o1.score >
+
+                        o2.score ? -1 : 1;
+            }
+        });
+        for (int i = 0; i < dsUser.size(); i++) {
+            if (dsUser.get(i).id.toString().equals(id)) {
+                final int score = dsUser.get(i).score;
+                final int money = dsUser.get(i).money;
+                final String name = dsUser.get(i).name;
+                final ShareDialog shareDialog = new ShareDialog(PlayOnlineActivity.this);
+                final View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+                btnMenu.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CustomDialogMenu dialogMenu = new CustomDialogMenu();
+                        dialogMenu.setCancelable(false);
+                        dialogMenu.show(getFragmentManager(), "abc");
+                        dialogMenu.setName(name);
+                        dialogMenu.setImage(image);
+                        dialogMenu.setMoney(money);
+                        dialogMenu.setScore(score);
+                        dialogMenu.setLuotchoi(Integer.parseInt(btLuotChoi.getText().toString()));
+                        dialogMenu.setRootView(rootView);
+                        dialogMenu.setContext(PlayOnlineActivity.this);
+                        dialogMenu.setShareDialog(shareDialog);
+                        dialogMenu.setUsers(dsUser);
+                    }
+                });
+                break;
+            }
+        }
+    }
+
     @Override
     protected void onDestroy() {
         mAd.destroy(this);
@@ -790,6 +840,17 @@ public class PlayOnlineActivity extends BaseActivity {
     protected void onResume() {
         mAd.resume(this);
         super.onResume();
+        if (mBool == true) {
+            player.setLooping(true);
+            player.setVolume(100, 100);
+            player.start();
+
+        } else
+
+        {
+            player.start();
+            player.pause();
+        }
     }
 
     @Override

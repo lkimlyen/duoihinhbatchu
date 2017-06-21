@@ -34,7 +34,7 @@ public class ResultActivity extends BaseActivity {
         textView.setText(getIntent().getStringExtra("kq"));
 
        setBtChoiTiep();
-
+        setBtShare();
     }
 
     private void setBtChoiTiep() {
@@ -117,5 +117,4 @@ public class ResultActivity extends BaseActivity {
         canvas.drawBitmap(bitmap, rect, rect, paint);
         return output;
     }
-
 }

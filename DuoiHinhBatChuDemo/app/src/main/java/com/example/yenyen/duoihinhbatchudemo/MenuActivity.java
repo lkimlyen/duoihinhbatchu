@@ -45,6 +45,7 @@ public class MenuActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     int score, money;
     RelativeLayout relativeLayout;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +56,8 @@ public class MenuActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser mUser = mAuth.getCurrentUser();
         getUser(mUser);
-
-        btmusic = (ToggleButton) findViewById(R.id.btmusic);
-        btProfile = (Button) findViewById(R.id.btProfile);
-        btChoiNgay = (Button) findViewById(R.id.btChoiNgay);
-        btBXH = (Button) findViewById(R.id.btBXH);
-        btLogout = (Button) findViewById(R.id.btLogout);
-        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
+        showProgressDialog();
+        anhxa();
 
         getValueFromMainActivity();
         if (isOnline() == false) {
@@ -114,9 +110,16 @@ public class MenuActivity extends BaseActivity {
 
         setBtMusic();
         btChoiNgay();
-        showProgressDialog();
         setBtLogout();
 
+    }
+
+    private void anhxa() {
+        btmusic = (ToggleButton) findViewById(R.id.btmusic);
+        btProfile = (Button) findViewById(R.id.btProfile);
+        btChoiNgay = (Button) findViewById(R.id.btChoiNgay);
+        btBXH = (Button) findViewById(R.id.btBXH);
+        btLogout = (Button) findViewById(R.id.btLogout);
     }
 
     private void setBtMusic() {
@@ -277,7 +280,6 @@ public class MenuActivity extends BaseActivity {
                         o2.score ? -1 : 1;
             }
         });
-        Log.d("dsUser.count", dsUser.size() + "");
         btBXH.setOnClickListener(new View.OnClickListener()
 
         {
@@ -296,9 +298,7 @@ public class MenuActivity extends BaseActivity {
 
 
         player = MediaPlayer.create(MenuActivity.this, R.raw.intro);
-        if (btmusic.isChecked())
-
-        {
+        if (btmusic.isChecked()) {
             player.setLooping(true);
             player.setVolume(100, 100);
             player.start();
@@ -313,10 +313,20 @@ public class MenuActivity extends BaseActivity {
 
     }
 
-    private void showProgressDialog() {
-        final ProgressDialog pd = new ProgressDialog(MenuActivity.this);
-        pd.setMessage("Đang tải dữ liệu...");
-        pd.show();
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
         CountDownTimer countDownTimer = new CountDownTimer(5000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -325,16 +335,15 @@ public class MenuActivity extends BaseActivity {
 
             @Override
             public void onFinish() {
-                pd.dismiss();
+                mProgressDialog.dismiss();
             }
         };
         countDownTimer.start();
     }
 
-    public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+    @Override
+    protected void onPause() {
+        super.onPause();
+        player.pause();
     }
 }

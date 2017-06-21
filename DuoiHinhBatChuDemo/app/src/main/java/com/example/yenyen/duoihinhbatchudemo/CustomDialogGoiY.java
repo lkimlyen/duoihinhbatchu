@@ -38,6 +38,13 @@ public class CustomDialogGoiY extends DialogFragment {
                 dismiss();
             }
         });
+        dialog.findViewById(R.id.btDong).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         TextView textView = (TextView) dialog.findViewById(R.id.tvGoiY);
         textView.setText(goiy);
         TextView tvTitle = (TextView) dialog.findViewById(R.id.tvTitle);
