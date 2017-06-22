@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gameplaybackground"
+    android:orientation="vertical"
+    android:weightSum="100"
     tools:context="com.example.yenyen.duoihinhbatchudemo.ResultActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_weight="30"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -25,14 +27,13 @@
                 android:id="@+id/ivAvatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 app:srcCompat="@drawable/avatar" />
 
             <ImageView
                 android:id="@+id/ivAvatarKhung"
-                android:layout_width="163dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
-
                 app:srcCompat="@drawable/avataricon" />
 
             <TextView
@@ -88,11 +89,10 @@
                 android:layout_marginTop="17dp"
                 android:gravity="right"
                 android:text="0$"
-                android:textColor="#ffffff"
-                android:textStyle="bold"
-
                 android:textAppearance="@style/TextAppearance.FontPath"
-                />
+                android:textColor="#ffffff"
+
+                android:textStyle="bold" />
         </FrameLayout>
 
     </LinearLayout>
@@ -101,15 +101,15 @@
         android:id="@+id/frameLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout">
+        android:layout_below="@+id/linearLayout"
+        android:layout_weight="20">
 
         <ImageView
             android:id="@+id/ivImageCH"
             android:layout_width="wrap_content"
             android:layout_height="210dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/canthiep"
-            />
+            app:srcCompat="@drawable/canthiep" />
 
         <ImageView
             android:id="@+id/ivPictureBorder"
@@ -125,10 +125,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout8"
-        android:layout_below="@+id/frameLayout2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_weight="30"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -145,23 +142,22 @@
             android:id="@+id/tvKetQua"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:layout_marginTop="5dp"
             android:text="Kết quả"
-            android:textColor="#ffffff"
-            android:textSize="35dp"
             android:textAppearance="@style/TextAppearance.FontPath"
-            />
+            android:textColor="#ffffff"
+            android:textSize="35dp" />
 
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout8"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/linearLayout9"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_weight="20"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <TextView
@@ -169,44 +165,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bạn được tặng +5"
-            android:textColor="#ffffff"
+            android:gravity="center"
             android:textAppearance="@style/TextAppearance.FontPath"
+            android:textColor="#ffffff"
             android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/ivDolaIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_weight="1"
             app:srcCompat="@drawable/dolaicon" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout9"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_weight="0"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btChoiTiep"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:layout_weight="1"
-            android:padding="5dp"
-            android:background="@drawable/buttonchoitiep" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/buttonchoitiep"
+             />
 
         <Button
 
-            android:padding="5dp"
             android:id="@+id/btShare"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@drawable/buttonchiase" />
+            android:background="@drawable/buttonchiase"
+            />
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

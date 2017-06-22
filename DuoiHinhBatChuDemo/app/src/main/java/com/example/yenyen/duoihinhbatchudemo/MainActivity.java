@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity {
         btDangNhap.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "facebook:onSuccess:" + loginResult);
+
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
 
@@ -96,7 +96,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "facebook:onCancel");
                 // ...
 
             }
@@ -140,8 +139,7 @@ public class MainActivity extends BaseActivity {
             intent.putExtra("name", name);
             startActivity(intent);
             finish();
-            Log.d("profile_picture", image);
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + mUser.getUid());
+
         }
 
     }
@@ -188,7 +186,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
+
         showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -196,15 +194,14 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(MainActivity.this, "Authentication Success",
+                            Toast.makeText(MainActivity.this, "Đăng nhập thành công",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(user);
 
                         } else {
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+
+                            Toast.makeText(MainActivity.this, "Đăng nhập thất bại",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
 
@@ -230,8 +227,7 @@ public class MainActivity extends BaseActivity {
             intent.putExtra("id", id);
             startActivity(intent);
             finish();
-            Log.d("profile_picture", image);
-            Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
         }
     }
 

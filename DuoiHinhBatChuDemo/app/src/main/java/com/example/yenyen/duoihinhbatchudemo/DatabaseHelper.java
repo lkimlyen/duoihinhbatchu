@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -100,14 +99,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (dbExist) {
             //khong lam gi ca, database da co roi
-            Toast.makeText(myContext, "Đã có", Toast.LENGTH_SHORT).show();
+
         } else {
             this.getReadableDatabase();
             try {
                 copyDataBase();//chep du lieu
-                Toast.makeText(myContext, "Thành công", Toast.LENGTH_SHORT).show();
+
             } catch (IOException e) {
-                Toast.makeText(myContext, "Không thành công", Toast.LENGTH_SHORT).show();
                 throw new Error("Error copying database");
 
             }

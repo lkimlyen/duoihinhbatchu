@@ -126,23 +126,21 @@ public class PlayOnlineActivity extends BaseActivity {
 
                                             @Override
                                             public void onRewardedVideoAdOpened() {
-                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show();
+
                                             }
 
                                             @Override
                                             public void onRewardedVideoStarted() {
-                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoStarted", Toast.LENGTH_SHORT).show();
+
                                             }
 
                                             @Override
                                             public void onRewardedVideoAdClosed() {
-                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdClosed", Toast.LENGTH_SHORT).show();
+
                                             }
 
                                             @Override
                                             public void onRewarded(RewardItem rewardItem) {
-                                                // Toast.makeText(PlayOnlineActivity.this, "onRewarded! currency: " + rewardItem.getType() + "  amount: " +
-                                                //        rewardItem.getAmount(), Toast.LENGTH_SHORT).show();
                                                 Toast.makeText(PlayOnlineActivity.this, "Bạn được tặng 10$", Toast.LENGTH_SHORT).show();
 
 //
@@ -151,8 +149,7 @@ public class PlayOnlineActivity extends BaseActivity {
 
                                             @Override
                                             public void onRewardedVideoAdLeftApplication() {
-                                                Toast.makeText(PlayOnlineActivity.this, "onRewardedVideoAdLeftApplication",
-                                                        Toast.LENGTH_SHORT).show();
+
                                             }
 
                                             @Override
@@ -244,25 +241,15 @@ public class PlayOnlineActivity extends BaseActivity {
 
             if ((secondsin - secondsout) > 900) {
                 luotchoi++;
+                secondsout = System.currentTimeMillis() / 1000;
+                btLuotChoi.setText(String.valueOf(luotchoi));
+                SharedPreferences ghi = getPreferences(MODE_PRIVATE);
+                SharedPreferences.Editor editor = ghi.edit();
+                editor.putInt("luotchoi", luotchoi);
+                editor.putLong("secondsout", secondsout);
+                editor.commit();
             }
-            if ((secondsin - secondsout) > 1800) {
-                luotchoi++;
 
-            }
-            if ((secondsin - secondsout) > 2700) {
-                luotchoi++;
-            }
-
-            if ((secondsin - secondsout) > 3600) {
-                luotchoi++;
-            }
-            secondsout = System.currentTimeMillis() / 1000;
-            btLuotChoi.setText(String.valueOf(luotchoi));
-            SharedPreferences ghi = getPreferences(MODE_PRIVATE);
-            SharedPreferences.Editor editor = ghi.edit();
-            editor.putInt("luotchoi", luotchoi);
-            editor.putLong("secondsout", secondsout);
-            editor.commit();
         }
     }
 
@@ -709,7 +696,7 @@ public class PlayOnlineActivity extends BaseActivity {
                                 mDatabase.child(dsKey.get(i)).child("money").setValue(money);
                                 tvTien.setText(String.valueOf(money) + "$");
 
-                                Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 25$", Toast.LENGTH_LONG).show();
+                                Toast.makeText(PlayOnlineActivity.this, "Bạn bị trừ 20$", Toast.LENGTH_LONG).show();
                                 tvTruDiem.setVisibility(View.INVISIBLE);
                             }
                         };

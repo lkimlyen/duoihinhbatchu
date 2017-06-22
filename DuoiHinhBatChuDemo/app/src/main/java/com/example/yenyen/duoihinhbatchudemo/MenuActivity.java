@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -126,7 +125,7 @@ public class MenuActivity extends BaseActivity {
         btmusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.i("boolean", String.valueOf(isChecked));
+
                 if (isChecked) {
                     mBool = true;
                     player.setLooping(true);
@@ -197,10 +196,7 @@ public class MenuActivity extends BaseActivity {
                         dem++;
                     }
                 }
-                if (dem > 0) {
-                    Log.d("PushServer", "Push không thành công");
-
-                } else {
+                if (dem == 0) {
                     User user = new User(id, name, image, 1, 100);
                     mDatabase.push().setValue(user);
                     aBoolean = false;

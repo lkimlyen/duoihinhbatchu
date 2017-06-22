@@ -15,7 +15,6 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -129,7 +128,6 @@ public class PlayActivity extends BaseActivity {
         luotchoi = lay.getInt("luotchoi", 5);
         btLuotChoi.setText(String.valueOf(luotchoi));
         if (luotchoi < 5) {
-
             if ((secondsin - secondsout) > 900) {
                 luotchoi++;
                 btLuotChoi.setText(String.valueOf(luotchoi));
@@ -358,7 +356,6 @@ public class PlayActivity extends BaseActivity {
         for (int i = 0; i < dsODapAn.size(); i++) {
             chuoikq.append(dsODapAn.get(i).getText().toString());
         }
-        Log.d("dapan", chuoikq.toString());
         if (s.equals(chuoikq.toString())) {
             mtrue.setVolume(100, 100);
             mtrue.start();
@@ -399,6 +396,7 @@ public class PlayActivity extends BaseActivity {
         } else {
             if (luotchoi > 0) {
                 luotchoi--;
+
                 long seconds = System.currentTimeMillis() / 1000;
                 SharedPreferences ghi = getPreferences(MODE_PRIVATE);
                 SharedPreferences.Editor editor = ghi.edit();
@@ -407,6 +405,8 @@ public class PlayActivity extends BaseActivity {
                 editor.apply();
 
             }
+
+            btLuotChoi.setText(String.valueOf(luotchoi));
             fail.setVolume(100, 100);
             fail.start();
             animate(layout);
