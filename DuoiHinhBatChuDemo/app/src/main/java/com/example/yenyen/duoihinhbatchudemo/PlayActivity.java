@@ -375,6 +375,8 @@ public class PlayActivity extends BaseActivity {
             for (int j = 0; j < dsODapAn.size(); j++) {
                 dsIVDapAn.get(j).setImageResource(R.drawable.tiletrue);
             }
+            CauHoi cauHoi = new CauHoi(dsCauHoi.get(vitri).id,1);
+            helper.updateStatus(cauHoi);
             CountDownTimer countDownTimer = new CountDownTimer(3000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {

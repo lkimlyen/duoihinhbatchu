@@ -40,8 +40,7 @@
                 android:id="@+id/tvCauHoi"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
-                android:layout_marginStart="60dp"
+                android:layout_marginLeft="55dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.FontPath"
@@ -62,9 +61,7 @@
                 android:text="5"
                 android:textAppearance="@style/TextAppearance.FontPath"
                 android:textColor="#ffffff" />
-
             />
-
 
         </FrameLayout>
 
@@ -76,16 +73,13 @@
                 android:id="@+id/ivCoinIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/frameLayout"
-                android:layout_toEndOf="@+id/frameLayout"
-                android:layout_toRightOf="@+id/frameLayout"
                 app:srcCompat="@drawable/coinicon" />
 
             <TextView
                 android:id="@+id/tvTien"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="55dp"
                 android:layout_marginTop="17dp"
                 android:gravity="right"
                 android:text="0$"
@@ -106,7 +100,7 @@
 
         <ImageView
             android:id="@+id/ivImageCH"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="210dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/canthiep" />
@@ -117,18 +111,14 @@
             android:layout_height="210dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/pictureborder"
-
             />
-
     </FrameLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="30"
         android:gravity="center"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
@@ -142,13 +132,11 @@
             android:id="@+id/tvKetQua"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             android:layout_marginTop="5dp"
             android:text="Kết quả"
             android:textAppearance="@style/TextAppearance.FontPath"
             android:textColor="#ffffff"
             android:textSize="35dp" />
-
 
     </LinearLayout>
 
